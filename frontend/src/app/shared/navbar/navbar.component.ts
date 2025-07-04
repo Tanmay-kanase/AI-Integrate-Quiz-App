@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -9,4 +9,14 @@ import { RouterLink } from '@angular/router';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
-export class NavbarComponent {}
+export class NavbarComponent {
+  ngOnInit() {
+    const button = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu');
+    if (button && menu) {
+      button.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+      });
+    }
+  }
+}
