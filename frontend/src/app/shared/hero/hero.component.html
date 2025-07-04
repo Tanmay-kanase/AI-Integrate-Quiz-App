@@ -21,7 +21,7 @@
         class="flex flex-col sm:flex-row justify-center md:justify-start gap-4 animate-fade-in-up delay-400"
       >
         <!-- New: Option to Upload PDF -->
-        <label
+        <!-- <label
           for="pdf-upload"
           class="bg-white text-indigo-600 px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 cursor-pointer flex items-center justify-center"
         >
@@ -41,29 +41,160 @@
           </svg>
           Upload PDF
           <input type="file" id="pdf-upload" accept=".pdf" class="hidden" />
-        </label>
+        </label> -->
 
         <!-- New: Option to Enter Topic -->
-        <a
-          href="#enter-topic"
-          class="border border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-indigo-600 transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
+        <!-- This block replaces your existing 'Enter Topic' <a> tag and the inline input/button -->
+        <div
+          class="flex flex-col sm:flex-row justify-center md:justify-start gap-4 animate-fade-in-up delay-400"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6 mr-2"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
+          <!-- Existing: Option to Upload PDF (keep this as is) -->
+          <label
+            for="pdf-upload"
+            class="bg-white text-indigo-600 px-8 py-3 rounded-full font-semibold shadow-lg hover:bg-gray-100 transition-all duration-9 transform hover:scale-105 cursor-pointer flex items-center justify-center"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-            />
-          </svg>
-          Enter Topic
-        </a>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+              />
+            </svg>
+            Upload PDF
+            <input type="file" id="pdf-upload" accept=".pdf" class="hidden" />
+          </label>
+
+          <!-- New: Button to open the "Enter Topic" modal -->
+          <button
+            (click)="openTopicModal()"
+            class="border border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-indigo-600 transition-all duration-300 transform hover:scale-105 flex items-center justify-center"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 mr-2"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+              />
+            </svg>
+            Enter Topic
+          </button>
+        </div>
+
+        <!-- Topic Input Modal -->
+        <div
+          *ngIf="showTopicModal"
+          class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-blur bg-opacity-50 backdrop-blur-sm modal-overlay"
+        >
+          <div
+            class="bg-gray-100 rounded-xl shadow-2xl p-6 md:p-8 w-full max-w-3xl transform transition-all duration-300 ease-out modal-content"
+            [ngClass]="{
+              'scale-100 opacity-100': showTopicModal,
+              'scale-95 opacity-0': !showTopicModal
+            }"
+          >
+            <div class="grid grid-cols-12 gap-4">
+              <!-- Added pt-4 for 15px padding from top -->
+              <!-- Left empty column (3 units) -->
+              <div class="col-span-12 md:col-span-3"></div>
+
+              <!-- Main content column (6 units) -->
+              <div class="col-span-12 md:col-span-6 flex flex-col items-center">
+                <h3
+                  class="text-2xl font-bold text-gray-900 text-gradient mb-6 flex items-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-8 w-8 mr-3 text-indigo-600"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9.663 17h4.673M12 20v-3m0 0l.688-.688C14.078 14.242 15 12.82 15 11c0-2.76-2.24-5-5-5S5 8.24 5 11c0 1.82.922 3.242 2.64 4.312L8 17H9.663z"
+                    />
+                  </svg>
+                  AI Generated Quiz
+                </h3>
+
+                <div class="w-full mb-6">
+                  <label for="modal-quiz-topic" class="sr-only"
+                    >Enter Quiz Topic</label
+                  >
+                  <input
+                    type="text"
+                    id="modal-quiz-topic"
+                    placeholder="e.g., Quantum Physics, Indian History, Machine Learning"
+                    class="w-full px-5 py-3 border border-gray-300 rounded-full text-lg text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                    [(ngModel)]="quizTopic"
+                  />
+                </div>
+
+                <button
+                  (click)="generateQuizAndCloseModal()"
+                  [disabled]="!quizTopic.trim()"
+                  class="w-full bg-indigo-600 text-white px-8 py-3 rounded-full font-semibold shadow-md hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-6 w-6 mr-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                  Generate Quiz
+                </button>
+              </div>
+
+              <!-- Right empty column (3 units) -->
+              <div class="col-span-12 md:col-span-3"></div>
+            </div>
+
+            <!-- Close button for the modal -->
+            <button
+              (click)="closeTopicModal()"
+              class="absolute top-4 right-4 text-gray-500 hover:text-gray-800 transition-colors duration-200"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-8 w-8"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
     <div
