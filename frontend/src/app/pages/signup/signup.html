@@ -1,0 +1,166 @@
+<section
+  class="relative overflow-hidden py-20 md:py-32 gradient-bg text-white flex items-center justify-center min-h-screen"
+>
+  <div
+    class="container mx-auto px-4 flex flex-col items-center justify-center relative z-10"
+  >
+    <div
+      class="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl text-gray-800"
+    >
+      <div>
+        <h2
+          class="mt-6 text-center text-3xl font-extrabold text-gray-900 text-gradient"
+        >
+          Create Your AI QuizMaster Account
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+          Join thousands of learners today!
+        </p>
+        <p class="mt-2 text-center text-sm text-gray-600">
+          Already a member?
+          <a
+            routerLink="/signin"
+            class="font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-300"
+          >
+            Sign In here
+          </a>
+        </p>
+      </div>
+      <form class="mt-8 space-y-6" (ngSubmit)="onSubmit()">
+        <div class="rounded-md shadow-sm -space-y-px">
+          <div>
+            <label for="email-address" class="sr-only">Email address</label>
+            <input
+              id="email-address"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Email address"
+              [(ngModel)]="email"
+              #emailInput="ngModel"
+            />
+            <!-- Basic validation feedback (optional, requires FormsModule) -->
+            <div
+              *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)"
+              class="text-red-500 text-xs mt-1"
+            >
+              <div *ngIf="emailInput.errors?.['required']">
+                Email is required.
+              </div>
+              <div *ngIf="emailInput.errors?.['email']">
+                Enter a valid email.
+              </div>
+            </div>
+          </div>
+          <div>
+            <label for="password" class="sr-only">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="new-password"
+              required
+              class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Password"
+              [(ngModel)]="password"
+              #passwordInput="ngModel"
+            />
+            <div
+              *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)"
+              class="text-red-500 text-xs mt-1"
+            >
+              <div *ngIf="passwordInput.errors?.['required']">
+                Password is required.
+              </div>
+              <div *ngIf="passwordInput.errors?.['minlength']">
+                Password must be at least 6 characters.
+              </div>
+            </div>
+          </div>
+          <div>
+            <label for="confirm-password" class="sr-only"
+              >Confirm Password</label
+            >
+            <input
+              id="confirm-password"
+              name="confirm-password"
+              type="password"
+              autocomplete="new-password"
+              required
+              class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Confirm Password"
+              [(ngModel)]="confirmPassword"
+              #confirmPasswordInput="ngModel"
+            />
+            <div
+              *ngIf="confirmPasswordInput.invalid && (confirmPasswordInput.dirty || confirmPasswordInput.touched)"
+              class="text-red-500 text-xs mt-1"
+            >
+              <div *ngIf="confirmPasswordInput.errors?.['required']">
+                Confirm password is required.
+              </div>
+            </div>
+            <div
+              *ngIf="password !== confirmPassword && confirmPasswordInput.dirty && confirmPasswordInput.touched"
+              class="text-red-500 text-xs mt-1"
+            >
+              Passwords do not match.
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 transform hover:scale-105"
+          >
+            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+              <!-- Heroicon name: solid/lock-closed -->
+              <svg
+                class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </span>
+            Sign Up
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- Background shapes for visual interest, mimicking the hero section -->
+  <div class="absolute inset-0 z-0 opacity-20">
+    <svg
+      class="absolute top-0 left-0 w-1/3 h-1/3"
+      fill="currentColor"
+      viewBox="0 0 200 200"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M100 0C44.772 0 0 44.772 0 100s44.772 100 100 100 100-44.772 100-100S155.228 0 100 0z"
+        class="text-indigo-400"
+      ></path>
+    </svg>
+    <svg
+      class="absolute bottom-0 right-0 w-1/4 h-1/4"
+      fill="currentColor"
+      viewBox="0 0 200 200"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M100 0C44.772 0 0 44.772 0 100s44.772 100 100 100 100-44.772 100-100S155.228 0 100 0z"
+        class="text-violet-400"
+      ></path>
+    </svg>
+  </div>
+</section>
