@@ -1,9 +1,33 @@
-import app from "./app";
-import { connectDB } from "./config/db";
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import userRoutes from "./routes/user.routes";
+import HttpException from "./exceptions/HttpException";
 
-const PORT = process.env.PORT || 5000;
+dotenv.config();
 
-connectDB();
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const app = express();
+app.use(express.json());
+app.use("/api/users", userRoutes);
+
+// Global error handler
+app.use(
+  (
+    err: HttpException,
+    _req: express.Request,
+    res: express.Response,
+    _next: express.NextFunction
+  ) => {
+    res
+      .status(err.status || 500)
+      .json({ status: err.status, message: err.message });
+  }
+);
+
+const PORT = process.env.PORT || 3000;
+const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/quizapp";
+
+mongoose.connect(MONGO_URI).then(() => {
+  console.log("MongoDB connected");
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 });
