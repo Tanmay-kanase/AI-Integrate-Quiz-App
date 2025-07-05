@@ -1,0 +1,167 @@
+<!-- src/app/pages/signin/signin.component.html -->
+
+<section
+  class="relative overflow-hidden py-12 md:py-16 gradient-bg text-white flex items-center justify-center min-h-screen"
+>
+  <!-- Background shapes for visual interest, mimicking the hero section -->
+  <div class="absolute inset-0 z-0 opacity-20">
+    <svg
+      class="absolute top-0 left-0 w-1/3 h-1/3"
+      fill="currentColor"
+      viewBox="0 0 200 200"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M100 0C44.772 0 0 44.772 0 100s44.772 100 100 100 100-44.772 100-100S155.228 0 100 0z"
+        class="text-indigo-400"
+      ></path>
+    </svg>
+    <svg
+      class="absolute bottom-0 right-0 w-1/4 h-1/4"
+      fill="currentColor"
+      viewBox="0 0 200 200"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M100 0C44.772 0 0 44.772 0 100s44.772 100 100 100 100-44.772 100-100S155.228 0 100 0z"
+        class="text-violet-400"
+      ></path>
+    </svg>
+  </div>
+
+  <div class="container mx-auto px-4 max-w-md relative z-10">
+    <div class="bg-white p-8 md:p-10 rounded-xl shadow-2xl text-gray-800">
+      <!-- Top Section with Quotes -->
+      <div class="text-center mb-8">
+        <p class="text-sm md:text-base text-gray-600 italic mb-2">
+          "The beautiful thing about learning is that no one can take it away
+          from you."
+        </p>
+        <p class="text-xs text-gray-500">- B.B. King</p>
+        <p class="text-sm md:text-base text-gray-600 italic mt-4 mb-2">
+          "Education is the most powerful weapon which you can use to change the
+          world."
+        </p>
+        <p class="text-xs text-gray-500">- Nelson Mandela</p>
+      </div>
+
+      <div>
+        <h2
+          class="mt-6 text-center text-3xl font-extrabold text-gray-900 text-gradient"
+        >
+          Sign In to AI QuizMaster
+        </h2>
+        <p class="mt-2 text-center text-sm text-gray-600">
+          Access your personalized learning journey.
+        </p>
+      </div>
+      <form class="mt-8 space-y-6" (ngSubmit)="onSubmit()">
+        <div class="rounded-md shadow-sm -space-y-px">
+          <div>
+            <label for="email-address" class="sr-only">Email address</label>
+            <input
+              id="email-address"
+              name="email"
+              type="email"
+              autocomplete="email"
+              required
+              class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Email address"
+              [(ngModel)]="email"
+            />
+          </div>
+          <div>
+            <label for="password" class="sr-only">Password</label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              autocomplete="current-password"
+              required
+              class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Password"
+              [(ngModel)]="password"
+            />
+          </div>
+        </div>
+
+        <div>
+          <button
+            type="submit"
+            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 transform hover:scale-105"
+          >
+            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+              <svg
+                class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clip-rule="evenodd"
+                />
+              </svg>
+            </span>
+            Sign In
+          </button>
+        </div>
+
+        <div class="relative flex justify-center text-sm">
+          <span class="px-2 bg-white text-gray-500"> Or continue with </span>
+          <div class="absolute inset-0 flex items-center" aria-hidden="true">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+        </div>
+
+        <div>
+          <button
+            type="button"
+            (click)="signInWithGoogle()"
+            class="group relative w-full flex justify-center py-3 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 transform hover:scale-105"
+          >
+            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+              <!-- Google Icon SVG (simplified, you might use an actual SVG from Google's branding guidelines) -->
+              <svg
+                class="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M12.24 10.27v2.4h6.66c-.25 1.54-1.28 3.03-3.08 4.02v.06h-.03l.03.03c-1.89 1.14-4.32 1.8-6.18 1.8-5.32 0-9.66-4.34-9.66-9.66s4.34-9.66 9.66-9.66c2.83 0 4.94 1.18 6.13 2.29l-.01.01 2.07-2.07-.01-.01C16.89 2.5 14.7 1.5 12.24 1.5c-6.18 0-11.16 4.98-11.16 11.16s4.98 11.16 11.16 11.16c6.18 0 10.74-4.5 10.74-10.92 0-.74-.06-1.45-.17-2.14H12.24z"
+                  fill="#4285F4"
+                />
+                <path
+                  d="M1.08 12.66c0-.85.12-1.67.34-2.45h2.17v2.45H1.08z"
+                  fill="#34A853"
+                />
+                <path
+                  d="M12.24 21.66c-2.77 0-5.11-.9-6.8-2.46l-2.17 2.17c2.16 1.95 4.98 3.09 8.97 3.09 4.98 0 8.78-3.32 10.74-9.66l-2.07-2.07c-1.19 1.11-3.3 2.29-6.13 2.29z"
+                  fill="#FBBC05"
+                />
+                <path
+                  d="M22.07 10.27l-2.07-2.07c-1.19-1.11-3.3-2.29-6.13-2.29V3.5h-.03c-.69-.01-1.39-.01-2.1-.01-4.98 0-8.97 3.09-10.74 9.66l2.17 2.17c1.69-1.56 4.03-2.46 6.8-2.46z"
+                  fill="#EA4335"
+                />
+              </svg>
+            </span>
+            Sign in with Google
+          </button>
+        </div>
+
+        <div class="text-center text-sm text-gray-600 mt-4">
+          Don't have an account?
+          <a
+            routerLink="/signup"
+            class="font-medium text-indigo-600 hover:text-indigo-500"
+          >
+            Sign Up
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
