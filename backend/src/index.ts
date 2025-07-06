@@ -3,13 +3,13 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user.routes";
 import HttpException from "./exceptions/HttpException";
-
+import quizTopicRoutes from './routes/quizTopic.routes';
 dotenv.config();
 
 const app = express();
 app.use(express.json());
 app.use("/api/users", userRoutes);
-
+app.use('/api/topics', quizTopicRoutes);
 // Global error handler
 app.use(
   (
