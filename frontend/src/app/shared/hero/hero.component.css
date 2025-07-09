@@ -1,0 +1,49 @@
+@keyframes pulse-icon {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+}
+
+.animate-pulse-icon {
+  animation: pulse-icon 1.5s ease-in-out infinite;
+}
+
+@keyframes spin-smooth {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-smooth {
+  animation: spin-smooth 1s linear infinite;
+}
+
+@keyframes backspace-effect {
+  0% {
+    opacity: 0;
+    transform: scaleX(1);
+    letter-spacing: 0;
+  }
+  50% {
+    opacity: 0;
+    transform: scaleX(0.7);
+    letter-spacing: -0.1em;
+  }
+  100% {
+    opacity: 0;
+    transform: scaleX(0);
+    letter-spacing: -0.5em;
+  }
+}
+
+.animate-backspace {
+  animation: backspace-effect 0.7s forwards;
+  transform-origin: left; /* Important! */
+}

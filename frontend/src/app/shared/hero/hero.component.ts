@@ -15,6 +15,8 @@ export class HeroComponent {
   showTopicModal: boolean = false; // Controls the visibility of the topic input modal
   topic: string = '';
   showGenerateButton = false;
+  isLoading = false;
+  showSpinner = false;
 
   ngOnInit(): void {
     // Initialization logic if needed
@@ -51,6 +53,19 @@ export class HeroComponent {
   }
 
   generateQuizAndCloseModal(): void {
+    if (!this.quizTopic.trim()) return;
+
+    this.isLoading = true;
+    // Delay showing spinner by 400ms to let backspace finish
+    setTimeout(() => {
+      this.showSpinner = true;
+    }, 400);
+
+    setTimeout(() => {
+      // Your logic after loading
+      this.isLoading = false;
+      this.showSpinner = false;
+    }, 3000);
     const apiUrl = `http://localhost:5000/api/quiz-generation/${encodeURIComponent(
       this.topic.trim()
     )}`;
