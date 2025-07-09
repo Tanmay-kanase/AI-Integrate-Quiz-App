@@ -7,6 +7,7 @@ import { Signup } from './pages/signup/signup';
 import { Layout } from './shared/layout/layout';
 import { Quiz } from './pages/quiz/quiz.component';
 import { SigninComponent } from './pages/signin/signin.component';
+import { AppLoading } from './shared/app-loading/app-loading';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   {
@@ -23,4 +24,5 @@ export const routes: Routes = [
   { path: 'navbar', component: NavbarComponent },
   { path: 'signup', component: Signup },
   { path: 'quiz', component: Quiz },
+  { path: 'loading', component: AppLoading },
 ];
