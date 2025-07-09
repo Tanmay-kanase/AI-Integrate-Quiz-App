@@ -1,74 +1,96 @@
 <!-- Main container -->
-<div class="shadow-lg mx-auto max-w-7xl m-0 p-0">
+<div class="m-0 p-0">
   <!-- Top Navbar -->
   <div
-    class="grid grid-cols-12 border-b p-4 items-center gradient-bg text text-white"
+    class="flex justify-between items-center border-b p-4 gradient-bg text-white"
   >
-    <div class="col-span-10">
+    <div>
       <h1 class="text-2xl font-semibold">Welcome, John Doe</h1>
       <p class="text-sm">User ID: 123456 | Quiz: General Knowledge</p>
     </div>
 
-    <div class="col-span-2 flex justify-end">
+    <div class="h-12 w-12">
       <img
-        src="https://via.placeholder.com/40"
+        src="https://via.placeholder.com/150"
         alt="Profile"
-        class="w-28 h-30 border"
+        class="h-full w-full object-cover rounded-full border-2 border-white shadow"
       />
     </div>
   </div>
 
   <!-- Main Grid: Left and Right Content -->
-  <div class="grid grid-cols-12 gap-4 mt-4">
+  <div class="grid grid-cols-1 md:grid-cols-12 lg:grid-cols-12">
     <!-- Left Panel: col-span-8 -->
-    <div class="col-span-8 p-4">
-      <!-- Question Info -->
-      <div class="mb-4">
-        <h2 class="text-xl font-bold">Question 2 of 20</h2>
-      </div>
-      <!-- Timer and Calculator -->
-      <div class="col-span-2 flex items-end text-right pr-4">
-        <div id="timer" class="text-lg font-bold text-red-600 mb-2">10:45</div>
-        <button
-          class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm"
-        >
-          🧮 Calculator
-        </button>
+    <div class="md:col-span-9 lg:grid-cols-9 p-4">
+      <div class="flex justify-between items-center p-2 border-b-2">
+        <!-- Question Info -->
+        <div class="">
+          <h2 class="text-xl font-bold">Question 2 of 20</h2>
+        </div>
+        <!-- Timer and Calculator -->
+        <!-- Timer and Calculator Inline -->
+        <div class="flex items-center space-x-4 rounded w-max">
+          <div id="timer" class="text-lg font-bold text-red-600">00:30</div>
+          <button
+            class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600 text-sm border border-yellow-600"
+          >
+            🧮 Calculator
+          </button>
+        </div>
       </div>
 
       <!-- Question Text -->
-      <p class="text-lg font-semibold mb-4">
-        Which planet is known as the Red Planet?
+      <p class="text-lg font-semibold mb-6 mt-4 overflow-x-auto">
+        Which planet is known as the Red Planet? Lorem ipsum dolor sit amet
+        consectetur adipisicing elit. Itaque qui impedit assumenda iusto
+        repellat quod minima odio eius officiis provident.
       </p>
 
-      <!-- Options -->
       <div class="space-y-3 mb-6">
         <label
-          class="block border border-gray-300 rounded p-3 hover:bg-blue-50 cursor-pointer"
+          class="flex items-start gap-2 p-3 border rounded hover:bg-blue-50 cursor-pointer"
         >
-          <input type="radio" name="answer" class="mr-2" />
-          A. Earth
+          <input type="radio" name="answer" class="mt-1" />
+          <span class="w-5 shrink-0">A.</span>
+          <span>
+            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Ullam repudiandae dolor a est placeat cumque.
+          </span>
         </label>
         <label
-          class="block border border-gray-300 rounded p-3 hover:bg-blue-50 cursor-pointer"
+          class="flex items-start gap-2 p-3 border rounded hover:bg-blue-50 cursor-pointer"
         >
-          <input type="radio" name="answer" class="mr-2" />
-          B. Jupiter
-        </label>
-        <label class="block border border-blue-500 bg-blue-100 rounded p-3">
-          <input type="radio" name="answer" class="mr-2" checked />
-          C. Mars
+          <input type="radio" name="answer" class="mt-1" />
+          <span class="w-5 shrink-0">A.</span>
+          <span>
+            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Ullam repudiandae dolor a est placeat cumque.
+          </span>
         </label>
         <label
-          class="block border border-gray-300 rounded p-3 hover:bg-blue-50 cursor-pointer"
+          class="flex items-start gap-2 p-3 border rounded hover:bg-blue-50 cursor-pointer"
         >
-          <input type="radio" name="answer" class="mr-2" />
-          D. Venus
+          <input type="radio" name="answer" class="mt-1" />
+          <span class="w-5 shrink-0">A.</span>
+          <span>
+            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Ullam repudiandae dolor a est placeat cumque.
+          </span>
+        </label>
+        <label
+          class="flex items-start gap-2 p-3 border rounded hover:bg-blue-50 cursor-pointer"
+        >
+          <input type="radio" name="answer" class="mt-1" />
+          <span class="w-5 shrink-0">A.</span>
+          <span>
+            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet consectetur
+            adipisicing elit. Ullam repudiandae dolor a est placeat cumque.
+          </span>
         </label>
       </div>
 
       <!-- Navigation Buttons -->
-      <div class="flex justify-between">
+      <div class="flex justify-between mt-6">
         <button
           class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
           disabled
@@ -90,14 +112,16 @@
     </div>
 
     <!-- Right Panel: col-span-4 -->
-    <div class="col-span-4 p-4 border-l">
+    <div
+      class="md:col-span-3 lg:grid-cols-3 p-4 md:border-l-2 border-t-2 md:border-t-0"
+    >
       <!-- Right Navbar Title -->
       <div class="mb-4">
         <h3 class="text-lg font-semibold">Total Questions: 20</h3>
       </div>
 
       <!-- Question Numbers -->
-      <div class="grid grid-cols-5 gap-3 mb-6">
+      <div class="grid grid-cols-5 gap-2 mb-6">
         <button class="w-10 h-10 rounded-full bg-blue-500 text-white">1</button>
         <button class="w-10 h-10 rounded-full bg-green-500 text-white">
           2
