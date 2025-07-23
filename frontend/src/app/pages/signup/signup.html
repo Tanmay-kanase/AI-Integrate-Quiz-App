@@ -1,166 +1,152 @@
-<section
-  class="relative overflow-hidden py-20 md:py-32 gradient-bg text-white flex items-center justify-center min-h-screen"
+<!--
+  signup.component.html:
+  This file defines the HTML structure and applies Tailwind CSS classes
+  for the modern, full-screen signup page.
+-->
+
+<div
+  class="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-purple-800 via-indigo-900 to-blue-900 font-inter p-4 sm:p-6 lg:p-8"
 >
   <div
-    class="container mx-auto px-4 flex flex-col items-center justify-center relative z-10"
+    class="flex flex-col md:flex-row w-full max-w-7xl mx-auto min-h-[80vh] rounded-2xl overflow-hidden shadow-2xl bg-white"
   >
+    <!-- Left Section: Image -->
     <div
-      class="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-2xl text-gray-800"
+      class="md:w-1/2 w-full bg-gray-900 flex items-center justify-center p-6 sm:p-8"
     >
-      <div>
+      <img
+        src="https://placehold.co/800x600/3B0066/FFFFFF?text=AI+Quiz+Fun!"
+        alt="AI Quiz Illustration"
+        class="rounded-xl object-cover w-full h-full max-h-[600px] shadow-lg"
+        (error)="onImageError($event)"
+      />
+    </div>
+
+    <!-- Right Section: Signup Form -->
+    <div
+      class="md:w-1/2 w-full bg-white flex flex-col items-center justify-center p-6 sm:p-12"
+    >
+      <div class="w-full max-w-md">
         <h2
-          class="mt-6 text-center text-3xl font-extrabold text-gray-900 text-gradient"
+          class="text-4xl font-extrabold text-center text-gray-900 mb-8 tracking-tight"
         >
-          Create Your AI QuizMaster Account
+          Join the AI Quiz!
         </h2>
-        <p class="mt-2 text-center text-sm text-gray-600">
-          Join thousands of learners today!
+        <p class="text-center text-gray-600 mb-10 text-lg">
+          Create your account to start challenging your knowledge.
         </p>
-        <p class="mt-2 text-center text-sm text-gray-600">
-          Already a member?
-          <a
-            routerLink="/signin"
-            class="font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-300"
+
+        <!-- Angular Form with ngSubmit and ngModel -->
+        <form (ngSubmit)="onSubmit()" #signupForm="ngForm" class="space-y-6">
+          <!-- Name Input -->
+          <div>
+            <label
+              htmlFor="name"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Full Name
+            </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              [(ngModel)]="formData.name"
+              placeholder="John Doe"
+              class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 text-base placeholder-gray-400"
+              required
+            />
+          </div>
+
+          <!-- Email Input -->
+          <div>
+            <label
+              htmlFor="email"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              [(ngModel)]="formData.email"
+              placeholder="you@example.com"
+              class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 text-base placeholder-gray-400"
+              required
+            />
+          </div>
+
+          <!-- Password Input -->
+          <div>
+            <label
+              htmlFor="password"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              [(ngModel)]="formData.password"
+              placeholder="Minimum 8 characters"
+              class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-purple-500 focus:border-purple-500 text-base placeholder-gray-400"
+              required
+            />
+          </div>
+
+          <!-- Profile Image Input -->
+          <div>
+            <label
+              htmlFor="profile_image"
+              class="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Profile Image (Optional)
+            </label>
+            <input
+              type="file"
+              id="profile_image"
+              name="profile_image"
+              accept="image/*"
+              (change)="onFileChange($event)"
+              class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+            />
+            <p
+              *ngIf="formData.profile_image"
+              class="mt-2 text-sm text-gray-500"
+            >
+              Selected: {{ formData.profile_image?.name }}
+            </p>
+          </div>
+
+          <!-- Message Display -->
+          <div
+            *ngIf="message"
+            [ngClass]="{'bg-green-100 text-green-700': messageType === 'success', 'bg-red-100 text-red-700': messageType === 'error'}"
+            class="p-3 rounded-lg text-center"
           >
-            Sign In here
+            {{ message }}
+          </div>
+
+          <!-- Submit Button -->
+          <div>
+            <button
+              type="submit"
+              [disabled]="!signupForm.valid"
+              class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-lg font-semibold text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition duration-300 ease-in-out transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Sign Up
+            </button>
+          </div>
+        </form>
+
+        <p class="mt-8 text-center text-gray-600 text-sm">
+          Already have an account?
+          <a href="#" class="font-medium text-purple-600 hover:text-purple-500">
+            Log in here
           </a>
         </p>
       </div>
-      <form class="mt-8 space-y-6" (ngSubmit)="onSubmit()">
-        <div class="rounded-md shadow-sm -space-y-px">
-          <div>
-            <label for="email-address" class="sr-only">Email address</label>
-            <input
-              id="email-address"
-              name="email"
-              type="email"
-              autocomplete="email"
-              required
-              class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Email address"
-              [(ngModel)]="email"
-              #emailInput="ngModel"
-            />
-            <!-- Basic validation feedback (optional, requires FormsModule) -->
-            <div
-              *ngIf="emailInput.invalid && (emailInput.dirty || emailInput.touched)"
-              class="text-red-500 text-xs mt-1"
-            >
-              <div *ngIf="emailInput.errors?.['required']">
-                Email is required.
-              </div>
-              <div *ngIf="emailInput.errors?.['email']">
-                Enter a valid email.
-              </div>
-            </div>
-          </div>
-          <div>
-            <label for="password" class="sr-only">Password</label>
-            <input
-              id="password"
-              name="password"
-              type="password"
-              autocomplete="new-password"
-              required
-              class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Password"
-              [(ngModel)]="password"
-              #passwordInput="ngModel"
-            />
-            <div
-              *ngIf="passwordInput.invalid && (passwordInput.dirty || passwordInput.touched)"
-              class="text-red-500 text-xs mt-1"
-            >
-              <div *ngIf="passwordInput.errors?.['required']">
-                Password is required.
-              </div>
-              <div *ngIf="passwordInput.errors?.['minlength']">
-                Password must be at least 6 characters.
-              </div>
-            </div>
-          </div>
-          <div>
-            <label for="confirm-password" class="sr-only"
-              >Confirm Password</label
-            >
-            <input
-              id="confirm-password"
-              name="confirm-password"
-              type="password"
-              autocomplete="new-password"
-              required
-              class="appearance-none rounded-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-              placeholder="Confirm Password"
-              [(ngModel)]="confirmPassword"
-              #confirmPasswordInput="ngModel"
-            />
-            <div
-              *ngIf="confirmPasswordInput.invalid && (confirmPasswordInput.dirty || confirmPasswordInput.touched)"
-              class="text-red-500 text-xs mt-1"
-            >
-              <div *ngIf="confirmPasswordInput.errors?.['required']">
-                Confirm password is required.
-              </div>
-            </div>
-            <div
-              *ngIf="password !== confirmPassword && confirmPasswordInput.dirty && confirmPasswordInput.touched"
-              class="text-red-500 text-xs mt-1"
-            >
-              Passwords do not match.
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <button
-            type="submit"
-            class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 transform hover:scale-105"
-          >
-            <span class="absolute left-0 inset-y-0 flex items-center pl-3">
-              <!-- Heroicon name: solid/lock-closed -->
-              <svg
-                class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-            </span>
-            Sign Up
-          </button>
-        </div>
-      </form>
     </div>
   </div>
-  <!-- Background shapes for visual interest, mimicking the hero section -->
-  <div class="absolute inset-0 z-0 opacity-20">
-    <svg
-      class="absolute top-0 left-0 w-1/3 h-1/3"
-      fill="currentColor"
-      viewBox="0 0 200 200"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M100 0C44.772 0 0 44.772 0 100s44.772 100 100 100 100-44.772 100-100S155.228 0 100 0z"
-        class="text-indigo-400"
-      ></path>
-    </svg>
-    <svg
-      class="absolute bottom-0 right-0 w-1/4 h-1/4"
-      fill="currentColor"
-      viewBox="0 0 200 200"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        d="M100 0C44.772 0 0 44.772 0 100s44.772 100 100 100 100-44.772 100-100S155.228 0 100 0z"
-        class="text-violet-400"
-      ></path>
-    </svg>
-  </div>
-</section>
+</div>

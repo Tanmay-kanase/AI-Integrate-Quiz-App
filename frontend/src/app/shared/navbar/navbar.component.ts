@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -10,6 +10,7 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./navbar.component.css'],
 })
 export class NavbarComponent {
+  isSticky: boolean = false;
   ngOnInit() {
     const button = document.getElementById('mobile-menu-button');
     const menu = document.getElementById('mobile-menu');
@@ -18,5 +19,10 @@ export class NavbarComponent {
         menu.classList.toggle('hidden');
       });
     }
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.isSticky = window.scrollY > 100;
   }
 }

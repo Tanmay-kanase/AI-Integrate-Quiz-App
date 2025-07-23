@@ -1,0 +1,210 @@
+<!-- add-questions.html -->
+<div *ngIf="routeReady; else loading">
+  <div
+    class="min-h-screen bg-gray-100 flex items-center justify-center p-4 sm:p-6 lg:p-8 font-sans"
+  >
+    <div class="bg-white p-6 sm:p-8 rounded-lg shadow-xl w-full max-w-2xl">
+      <h2 class="text-3xl font-extrabold text-gray-900 text-center mb-8">
+        Add Questions for Quiz Topic:
+        <span class="text-indigo-600">{{ quizTopicId }}</span>
+      </h2>
+      <p class="text-center text-gray-600 mb-6">
+        You need to add {{ totalQuestions }} questions.
+      </p>
+
+      <form
+        [formGroup]="questionsForm"
+        (ngSubmit)="onSubmit()"
+        class="space-y-8"
+      >
+        <div formArrayName="questions" class="space-y-10">
+          <div
+            *ngFor="let questionGroup of getQuestions().controls; let i = index"
+            [formGroupName]="i"
+            class="p-6 border border-gray-200 rounded-lg shadow-sm bg-gray-50"
+          >
+            <h3 class="text-xl font-semibold text-gray-800 mb-4">
+              Question {{ i + 1 }}
+            </h3>
+
+            <!-- Question Text -->
+            <div class="mb-4">
+              <label
+                [for]="'questionText-' + i"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Question Text <span class="text-red-500">*</span></label
+              >
+              <input
+                type="text"
+                [id]="'questionText-' + i"
+                formControlName="questionText"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
+                placeholder="e.g., What is the capital of France?"
+                [ngClass]="{'border-red-500': questionGroup.get('questionText')?.invalid && (questionGroup.get('questionText')?.dirty || questionGroup.get('questionText')?.touched)}"
+              />
+              <div
+                *ngIf="questionGroup.get('questionText')?.invalid && (questionGroup.get('questionText')?.dirty || questionGroup.get('questionText')?.touched)"
+                class="text-red-500 text-xs mt-1"
+              >
+                <div
+                  *ngIf="questionGroup.get('questionText')?.errors?.['required']"
+                >
+                  Question text is required.
+                </div>
+              </div>
+            </div>
+
+            <!-- Options -->
+            <div class="mb-4">
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Options <span class="text-red-500">*</span></label
+              >
+              <div formArrayName="options" class="space-y-3">
+                <div
+                  *ngFor="let optionControl of getOptions(i).controls; let j = index"
+                  class="flex items-center space-x-2"
+                >
+                  <input
+                    type="text"
+                    [id]="'option-' + i + '-' + j"
+                    [formControlName]="j"
+                    class="flex-grow px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
+                    placeholder="Option {{ j + 1 }}"
+                    [ngClass]="{'border-red-500': optionControl.invalid && (optionControl.dirty || optionControl.touched)}"
+                  />
+                  <button
+                    type="button"
+                    (click)="removeOption(i, j)"
+                    *ngIf="getOptions(i).length > 2"
+                    class="p-2 text-red-600 hover:text-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 rounded-full transition duration-150 ease-in-out"
+                    title="Remove Option"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-5 w-5"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm6 0a1 1 0 11-2 0v6a1 1 0 112 0V8z"
+                        clip-rule="evenodd"
+                      />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              <button
+                type="button"
+                (click)="addOption(i)"
+                class="mt-3 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-150 ease-in-out"
+              >
+                Add Option
+              </button>
+              <div
+                *ngIf="getOptions(i).invalid && (getOptions(i).dirty || getOptions(i).touched)"
+                class="text-red-500 text-xs mt-1"
+              >
+                <div *ngIf="getOptions(i).errors?.['minlength']">
+                  At least 2 options are required.
+                </div>
+              </div>
+            </div>
+
+            <!-- Correct Answer -->
+            <div class="mb-4">
+              <label
+                [for]="'correctAnswer-' + i"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Correct Answer (Option Index)
+                <span class="text-red-500">*</span></label
+              >
+              <input
+                type="number"
+                [id]="'correctAnswer-' + i"
+                formControlName="correctAnswer"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
+                placeholder="e.g., 0 for first option, 1 for second"
+                [min]="0"
+                [max]="getOptions(i).length - 1"
+                [ngClass]="{'border-red-500': questionGroup.get('correctAnswer')?.invalid && (questionGroup.get('correctAnswer')?.dirty || questionGroup.get('correctAnswer')?.touched) || questionGroup.errors?.['invalidCorrectAnswerIndex']}"
+              />
+              <div
+                *ngIf="questionGroup.get('correctAnswer')?.invalid && (questionGroup.get('correctAnswer')?.dirty || questionGroup.get('correctAnswer')?.touched)"
+                class="text-red-500 text-xs mt-1"
+              >
+                <div
+                  *ngIf="questionGroup.get('correctAnswer')?.errors?.['required']"
+                >
+                  Correct answer index is required.
+                </div>
+                <div
+                  *ngIf="questionGroup.get('correctAnswer')?.errors?.['min']"
+                >
+                  Index cannot be negative.
+                </div>
+                <div
+                  *ngIf="questionGroup.get('correctAnswer')?.errors?.['max']"
+                >
+                  Index exceeds available options.
+                </div>
+              </div>
+              <div
+                *ngIf="questionGroup.errors?.['invalidCorrectAnswerIndex'] && (questionGroup.get('correctAnswer')?.dirty || questionGroup.get('correctAnswer')?.touched)"
+                class="text-red-500 text-xs mt-1"
+              >
+                Correct answer index must be within the range of options (0 to
+                {{ getOptions(i).length - 1 }}).
+              </div>
+            </div>
+
+            <!-- Explanation -->
+            <div>
+              <label
+                [for]="'explanation-' + i"
+                class="block text-sm font-medium text-gray-700 mb-1"
+                >Explanation (Optional)</label
+              >
+              <textarea
+                [id]="'explanation-' + i"
+                formControlName="explanation"
+                rows="2"
+                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out"
+                placeholder="Optional explanation for the correct answer."
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Submission Button -->
+        <div>
+          <button
+            type="submit"
+            [disabled]="questionsForm.invalid || isLoading"
+            class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <span *ngIf="!isLoading">Submit All Questions</span>
+            <span *ngIf="isLoading">Submitting...</span>
+          </button>
+        </div>
+
+        <!-- Success/Error Messages -->
+        <div
+          *ngIf="successMessage"
+          class="mt-4 p-3 rounded-md bg-green-100 text-green-700 text-sm text-center"
+        >
+          {{ successMessage }}
+        </div>
+        <div
+          *ngIf="errorMessage"
+          class="mt-4 p-3 rounded-md bg-red-100 text-red-700 text-sm text-center"
+        >
+          {{ errorMessage }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<ng-template #loading>
+  <p>Loading...</p>
+</ng-template>

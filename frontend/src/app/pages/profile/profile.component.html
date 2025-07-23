@@ -1,0 +1,306 @@
+<!-- profile.component.html -->
+
+<div
+  class="min-h-screen w-full bg-gray-100 dark:bg-gray-900 py-10 px-4 sm:px-6 lg:px-8 font-sans"
+>
+  <div
+    class="max-w-6xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden md:flex md:items-start p-6"
+  >
+    <!-- Profile Header Section -->
+    <div
+      class="flex-shrink-0 md:mr-8 mb-6 md:mb-0 text-center md:w-1/3 lg:w-1/4"
+    >
+      <div
+        class="relative w-32 h-32 rounded-full overflow-hidden mx-auto border-4 border-indigo-500 shadow-md"
+      >
+        <!-- Angular binding for profile image -->
+
+        <!-- Optional: Edit Profile Image Icon -->
+        <div
+          class="absolute bottom-0 right-0 p-1 bg-indigo-500 rounded-full text-white cursor-pointer hover:bg-indigo-600 transition-colors duration-200"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            viewBox="0 0 20 20"
+            fill="currentColor"
+          >
+            <path
+              d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zm-1.88 1.88L5 12.25V15h2.75l6.36-6.36-2.75-2.75z"
+            />
+          </svg>
+        </div>
+      </div>
+      <h2 class="mt-4 text-3xl font-extrabold text-gray-900 dark:text-white">
+        {{ user?.name || "Loading..." }}
+      </h2>
+      <p class="text-indigo-600 dark:text-indigo-400 text-lg">
+        {{ user?.email || "N/A" }}
+      </p>
+      <span
+        class="inline-flex items-center mt-2 px-3 py-1 rounded-full text-sm font-medium"
+        [ngClass]="{
+          'bg-indigo-100 text-indigo-800 dark:bg-indigo-700 dark:text-indigo-100':
+            user?.role === 'user',
+          'bg-purple-100 text-purple-800 dark:bg-purple-700 dark:text-purple-100':
+            user?.role === 'admin'
+        }"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-4 w-4 mr-1"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        bghbghgf
+      </span>
+      <p class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
+        Member since {{ formatDate(user?.createdAt) || "N/A" }}
+      </p>
+      <button
+        (click)="onEditProfile()"
+        class="mt-4 px-6 py-2 bg-indigo-600 text-white font-medium rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-300 ease-in-out"
+      >
+        Edit Profile
+      </button>
+    </div>
+
+    <!-- Profile Details Section -->
+    <div class="flex-1 md:w-2/3 lg:w-3/4">
+      <!-- Section 1: User Statistics (Visible for all roles) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-sm">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            Quizzes Attempted
+          </h3>
+          <p class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+            {{ totalQuizzesAttempted }}
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-300">
+            Total quizzes you've taken.
+          </p>
+        </div>
+        <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-sm">
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+            Average Score
+          </h3>
+          <p class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+            ghfhgfhfg
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-300">
+            Your average performance across quizzes.
+          </p>
+        </div>
+      </div>
+
+      <!-- Section: Recent Quiz Activity (Visible for all roles) -->
+      <div class="mb-8">
+        <div class="flex justify-between items-center mb-4">
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
+            Recent Quiz Activity
+          </h3>
+          <a
+            href="#"
+            (click)="onViewAllActivity()"
+            class="text-indigo-600 dark:text-indigo-400 hover:underline"
+            >View All Activity &rarr;</a
+          >
+        </div>
+        <div
+          *ngIf="recentActivities.length > 0; else noActivity"
+          class="grid grid-cols-1 gap-4"
+        >
+          <div
+            *ngFor="let activity of recentActivities"
+            class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow hover:shadow-lg transition-shadow duration-300 flex items-center justify-between"
+          >
+            <div>
+              <h4
+                class="text-lg font-semibold text-gray-900 dark:text-white truncate"
+              >
+                {{ activity.quizTitle }}
+              </h4>
+              <p class="text-sm text-gray-600 dark:text-gray-300">
+                Completed on {{ formatDate(activity.completionDate) }}
+              </p>
+            </div>
+            <span
+              class="px-3 py-1 rounded-full text-sm font-medium"
+              [ngClass]="{
+                'bg-green-100 text-green-800 dark:bg-green-700 dark:text-green-100':
+                  (activity.score / activity.totalQuestions) * 100 >= 70,
+                'bg-yellow-100 text-yellow-800 dark:bg-yellow-700 dark:text-yellow-100':
+                  (activity.score / activity.totalQuestions) * 100 < 70 &&
+                  (activity.score / activity.totalQuestions) * 100 >= 40,
+                'bg-red-100 text-red-800 dark:bg-red-700 dark:text-red-100':
+                  (activity.score / activity.totalQuestions) * 100 < 40
+              }"
+            >
+              {{ activity.score }}/{{ activity.totalQuestions }} ({{
+                (activity.score / activity.totalQuestions) * 100
+                  | number : "1.0-0"
+              }}%)
+            </span>
+          </div>
+        </div>
+        <ng-template #noActivity>
+          <div
+            class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow text-center text-gray-600 dark:text-gray-300"
+          >
+            No recent quiz activity found. Start a quiz today!
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Admin Specific Sections -->
+      <div *ngIf="user?.role === 'admin'">
+        <!-- Section 2: Admin Statistics -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+          <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-sm">
+            <h3
+              class="text-lg font-semibold text-gray-900 dark:text-white mb-2"
+            >
+              Quizzes Created
+            </h3>
+            <p class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+              {{ totalQuizzesCreated }}
+            </p>
+            <p class="text-sm text-gray-500 dark:text-gray-300">
+              Total quizzes you've published.
+            </p>
+          </div>
+          <div class="bg-gray-50 dark:bg-gray-700 p-4 rounded-lg shadow-sm">
+            <h3
+              class="text-lg font-semibold text-gray-900 dark:text-white mb-2"
+            >
+              Questions Contributed
+            </h3>
+            <p class="text-3xl font-bold text-indigo-600 dark:text-indigo-400">
+              {{ totalQuestionsContributed }}
+            </p>
+            <p class="text-sm text-gray-500 dark:text-gray-300">
+              Questions you've added across quizzes.
+            </p>
+          </div>
+        </div>
+
+        <!-- Section 3: Your Latest Quizzes (Admin Only) -->
+        <div class="mb-8">
+          <div class="flex justify-between items-center mb-4">
+            <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
+              Your Latest Quizzes
+            </h3>
+            <a
+              href="#"
+              (click)="onViewAllQuizzes()"
+              class="text-indigo-600 dark:text-indigo-400 hover:underline"
+              >View All Quizzes &rarr;</a
+            >
+          </div>
+          <div
+            *ngIf="quizzesCreated.length > 0; else noQuizzesCreated"
+            class="grid grid-cols-1 md:grid-cols-2 gap-4"
+          >
+            <div
+              *ngFor="let quiz of quizzesCreated"
+              class="bg-white dark:bg-gray-700 p-5 rounded-lg shadow hover:shadow-lg transition-shadow duration-300"
+            >
+              <h4
+                class="text-xl font-semibold text-gray-900 dark:text-white mb-2 truncate"
+              >
+                {{ quiz.title }}
+              </h4>
+              <p
+                class="text-gray-600 dark:text-gray-300 text-sm mb-3 line-clamp-2"
+              >
+                {{ quiz.description || "No description provided." }}
+              </p>
+              <div
+                class="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400"
+              >
+                <span
+                  ><strong class="text-gray-800 dark:text-gray-200">{{
+                    quiz.totalQuestions || 0
+                  }}</strong>
+                  Questions</span
+                >
+                <span
+                  ><strong class="text-gray-800 dark:text-gray-200">{{
+                    quiz.atendeeNumbers || 0
+                  }}</strong>
+                  Attendees</span
+                >
+                <span
+                  ><strong class="text-gray-800 dark:text-gray-200">{{
+                    quiz.time || 0
+                  }}</strong>
+                  Mins</span
+                >
+              </div>
+              <div class="mt-4 flex space-x-2">
+                <button
+                  (click)="onEditQuiz(quiz._id)"
+                  class="flex-1 py-2 px-4 bg-indigo-500 text-white rounded-md text-sm hover:bg-indigo-600 transition-colors"
+                >
+                  Edit
+                </button>
+                <button
+                  (click)="onDeleteQuiz(quiz._id)"
+                  class="flex-1 py-2 px-4 bg-red-500 text-white rounded-md text-sm hover:bg-red-600 transition-colors"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+          <ng-template #noQuizzesCreated>
+            <div
+              class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow text-center text-gray-600 dark:text-gray-300 col-span-full"
+            >
+              You haven't created any quizzes yet.
+            </div>
+          </ng-template>
+        </div>
+
+        <!-- Section 4: Call to Action for New Quiz (Admin Only) -->
+        <div
+          class="bg-indigo-50 dark:bg-indigo-900 p-6 rounded-lg text-center shadow-sm"
+        >
+          <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-3">
+            Ready to Create More Quizzes?
+          </h3>
+          <p class="text-gray-700 dark:text-gray-300 mb-4">
+            Share your knowledge with the community by creating new engaging
+            quizzes!
+          </p>
+          <button
+            (click)="onCreateNewQuiz()"
+            class="px-8 py-3 bg-indigo-600 text-white font-bold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5 inline-block mr-2"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                clip-rule="evenodd"
+              />
+            </svg>
+            Create New Quiz
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
