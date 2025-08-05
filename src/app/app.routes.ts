@@ -7,14 +7,16 @@ export const routes: Routes = [
     component: MainLayoutComponent,
     children: [
       {
-        path: '',
-        loadComponent: () =>
-          import('./pages/home/home.component').then((m) => m.HomeComponent),
-      },
-      {
         path: 'about',
         loadComponent: () =>
           import('./pages/about/about.component').then((m) => m.AboutComponent),
+      },
+      {
+        path: 'signup',
+        loadComponent: () =>
+          import('./pages/signup/signup.component').then(
+            (m) => m.SignupComponent
+          ),
       },
     ],
   },

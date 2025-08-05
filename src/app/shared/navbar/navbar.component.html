@@ -1,4 +1,4 @@
-<nav class="navbar">
+<!-- <nav class="navbar">
   <div class="navbar-brand">PricePulse</div>
   <ul class="navbar-links">
     <li><a routerLink="/">Home</a></li>
@@ -6,4 +6,122 @@
     <li><a routerLink="/contact">Contact</a></li>
     <li><a routerLink="/signin">Sign In</a></li>
   </ul>
+</nav> -->
+<nav class="w-full z-50 transition-all duration-300 fixed top-0">
+  <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+    <div class="flex-shrink-0">
+      <a href="/" class="flex items-center">
+        <!-- {/* Replace with your actual logo component or image */} -->
+        <img
+          src="https://thedigitalmart.in/images/black_logo.png"
+          alt="The Digital Mart Logo"
+          class="h-8 md:h-10"
+        />
+        <!-- {/* If your logo is complex HTML+Tailwind, you can put it here directly */} -->
+        <div class="text-xl font-bold text-gray-800">THE DIGITAL MART</div>
+      </a>
+    </div>
+
+    <!-- {/* Desktop Navigation */} -->
+    <div class=" ">
+      <nav class="flex justify-between items-center gap-10">
+        <!-- {navItems.map((item) => ( -->
+        <div class="relative group">
+          <a
+            href="{item.link}"
+            class="text-gray-700 hover:text-blue-600 font-medium py-2 px-2 transition-all duration-300 relative group-hover:after:scale-x-100 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:bg-blue-600 after:w-full after:scale-x-0 after:transition-transform after:duration-300 after:origin-left"
+          >
+            Home
+          </a>
+          <!-- {item.dropdown && (
+                  <div class="absolute left-0 mt-2 w-60 bg-white rounded-md shadow-lg py-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform scale-95 group-hover:scale-100">
+                    {item.dropdown.map((subItem) => (
+                      <a
+                        key={subItem}
+                        href="#" 
+                        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200"
+                      >
+                        {subItem}
+                      </a>
+                    ))}
+                  </div>
+                )} -->
+        </div>
+        <!-- ))} -->
+      </nav>
+    </div>
+
+    <div>
+      <button
+        class="btn-wrap flex h-[60px] w-[60px] flex-col items-center justify-center rounded-full bg-gray-400 transition-all duration-300 hover:gap-0.5 focus:outline-none"
+        data-bs-toggle="offcanvas"
+        data-bs-target="#offcanvasMenuRight"
+      >
+        <span
+          class="bar h-[2px] w-5 mb-1 rounded-[10px] bg-gray-800 transition-all duration-300"
+        ></span>
+        <span
+          class="bar h-[2px] w-5 mb-1 rounded-[10px] bg-gray-800 transition-all duration-300"
+        ></span>
+        <span
+          class="bar h-[2px] w-[10px] mb-1 rounded-[10px] bg-gray-800 transition-all duration-300"
+        ></span>
+      </button>
+    </div>
+
+    <!-- {/* Mobile Menu Button (Hamburger) */} -->
+    <div class="lg:hidden">
+      <button
+        class="text-gray-700 hover:text-blue-600 focus:outline-none focus:text-blue-600"
+      >
+        <svg
+          class="h-6 w-6"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <!-- {isMobileMenuOpen ? ( -->
+          <path d="M6 18L18 6M6 6l12 12"></path>
+          <!-- ) : ( -->
+          <path d="M4 6h16M4 12h16M4 18h16"></path>
+          <!-- )} -->
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- {/* Mobile Menu (Hidden by default, will show based on isMobileMenuOpen state) */}
+      {/* You'd typically add more logic here to slide it in/out */}
+      {isMobileMenuOpen && ( -->
+  <div class="lg:hidden bg-white shadow-lg pb-4">
+    <!-- {navItems.map((item) => ( -->
+    <div key="{item.name}" class="relative group">
+      <a
+        href="{item.link}"
+        class="block px-4 py-2 text-gray-700 hover:bg-gray-100 hover:text-blue-600 transition-colors duration-200"
+      >
+        gfhgfhgfhf
+      </a>
+      <!-- {item.dropdown && ( -->
+      <div class="pl-6">
+        <!-- {" "}
+                  {/* Indent dropdown items for mobile */}
+                  {item.dropdown.map((subItem) => ( -->
+        <a
+          key="{subItem}"
+          href="#"
+          class="block px-4 py-2 text-gray-600 hover:bg-gray-50 hover:text-blue-500 text-sm transition-colors duration-200"
+        >
+          <!-- {subItem} -->
+        </a>
+        <!-- ))} -->
+      </div>
+      <!-- )} -->
+    </div>
+    <!-- ))}/ -->
+  </div>
+  <!-- )} -->
 </nav>
