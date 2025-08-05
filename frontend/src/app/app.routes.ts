@@ -31,7 +31,7 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: '/profile', component: ProfileComponent },
+  { path: 'profile', component: ProfileComponent },
   { path: 'about', component: AboutComponent },
   { path: 'navbar', component: NavbarComponent },
   { path: 'signup', component: Signup },
