@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import QuizTopicService from "../services/quizTopic.service";
 import { AuthRequest } from "../middlewares/auth.middleware";
 import quizTopicModel from "../models/quizTopic.model";
-
 const quizTopicService = new QuizTopicService();
 
 export const createQuizTopic = async (

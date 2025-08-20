@@ -36,7 +36,7 @@ export class Signup {
 
   onImageError(event: Event): void {
     const target = event.target as HTMLImageElement;
-    target.src = 'assets/default-image.png'; // fallback image
+    target.src = ''; // fallback image
   }
 
   onSubmit(): void {
@@ -45,6 +45,7 @@ export class Signup {
       email: this.formData.email,
       password: this.formData.password,
     };
+    
 
     const apiUrl = `${environment.apiUrl}/api/users/register`;
 

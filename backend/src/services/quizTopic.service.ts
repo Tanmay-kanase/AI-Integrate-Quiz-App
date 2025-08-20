@@ -9,7 +9,7 @@ class QuizTopicService {
   }
 
   async findAll(): Promise<IQuizTopic[]> {
-    return await QuizTopic.find();
+    return await QuizTopic.find().populate("createdBy", "name");;
   }
 
   async findById(id: string): Promise<IQuizTopic> {
