@@ -5,7 +5,7 @@ import { AboutComponent } from './pages/about/about.component';
 import { HomeComponent } from './pages/home/home.component';
 import { Signup } from './pages/signup/signup';
 import { Layout } from './shared/layout/layout';
-import { Quiz } from './pages/Quiz/quiz/quiz.component';
+import { QuizComponent } from './pages/Quiz/quiz/quiz.component';
 import { SigninComponent } from './pages/signin/signin.component';
 import { AppLoading } from './shared/app-loading/app-loading';
 import { ProfileComponent } from './pages/profile/profile.component';
@@ -35,7 +35,7 @@ export const routes: Routes = [
   { path: 'about', component: AboutComponent },
   { path: 'navbar', component: NavbarComponent },
   { path: 'signup', component: Signup },
-  { path: 'quiz', component: Quiz },
+  { path: 'quiz', component: QuizComponent },
   { path: 'loading', component: AppLoading },
   { path: 'add-questions', component: AddQuestionsComponent },
 ];

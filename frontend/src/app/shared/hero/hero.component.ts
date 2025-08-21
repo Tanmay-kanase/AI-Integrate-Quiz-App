@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { QuizzesComponent } from '../quizzes/quizzes.component';
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, HttpClientModule],
+  imports: [CommonModule, RouterLink, FormsModule, HttpClientModule, QuizzesComponent],
   templateUrl: './hero.component.html',
   styleUrls: ['./hero.component.css'],
 })

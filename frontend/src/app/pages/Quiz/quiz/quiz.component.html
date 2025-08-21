@@ -1,5 +1,17 @@
+<!-- quiz.component.html (partial update for context) -->
+<div *ngIf="showInstructions">
+  <app-instructions
+    [quizTitle]="currentQuiz?.title"
+    [quizDescription]="currentQuiz?.description"
+    [quizCategory]="currentQuiz?.category"
+    [quizTotalQuestions]="currentQuiz?.totalQuestions"
+    [time]="+currentQuiz?.time"
+    (quizStart)="handleQuizStart()"
+  ></app-instructions>
+</div>
+
 <!-- Main container -->
-<div class="m-0 p-0">
+<div *ngIf="!showInstructions" class="m-0 p-0">
   <!-- Top Navbar -->
   <div
     class="flex justify-between items-center border-b p-4 gradient-bg text-white"
@@ -19,7 +31,7 @@
   </div>
 
   <!-- Main Grid: Left and Right Content -->
-  <div class="grid grid-cols-1 md:grid-cols-12 lg:grid-cols-12 ">
+  <div class="grid grid-cols-1 md:grid-cols-12 lg:grid-cols-12">
     <!-- Left Panel: col-span-8 -->
     <div class="md:col-span-9 lg:grid-cols-9 p-4">
       <div class="flex justify-between items-center p-2 border-b-2">
