@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz Completed</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .fade-in-element {
+        animation: fadeIn 0.8s ease-out forwards;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4"
+  >
+    <div
+      class="bg-gray-800 p-12 rounded-2xl shadow-2xl max-w-lg w-full transform transition-all hover:scale-105 duration-300"
+    >
+      <div class="text-center">
+        <h1 class="text-5xl font-extrabold text-teal-400 mb-2 fade-in-element">
+          Quiz Completed!
+        </h1>
+        <p
+          class="text-gray-400 text-lg mb-8 fade-in-element"
+          style="animation-delay: 0.2s"
+        >
+          Thanks for attending the quiz.
+        </p>
+      </div>
+
+      <div
+        class="bg-gray-700 p-8 rounded-xl mb-8 border border-gray-600 fade-in-element"
+        style="animation-delay: 0.4s"
+      >
+        <h2 class="text-2xl font-bold mb-4 text-center">Your Result</h2>
+        <div class="flex flex-col items-center space-y-4">
+          <div class="text-4xl font-bold tracking-wider text-green-400">
+            <span class="text-green-400">Pass</span>
+          </div>
+          <div class="text-6xl font-extrabold text-white">
+            85<span class="text-3xl font-light">%</span>
+          </div>
+          <p class="text-gray-400">You scored 85 out of 100.</p>
+        </div>
+      </div>
+
+      <div class="text-center fade-in-element" style="animation-delay: 0.6s">
+        <button
+          class="bg-gradient-to-r from-teal-500 to-teal-700 hover:from-teal-600 hover:to-teal-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-teal-500 focus:ring-opacity-50"
+        >
+          Download Certificate
+        </button>
+        <p class="mt-4 text-sm text-gray-500">
+          Please note: The certificate will be downloaded as a PDF.
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -17,8 +17,12 @@
     class="flex justify-between items-center border-b p-4 gradient-bg text-white"
   >
     <div>
-      <h1 class="text-2xl font-semibold">Welcome, John Doe</h1>
-      <p class="text-sm">User ID: 123456 | Quiz: General Knowledge</p>
+      <h1 class="text-2xl font-semibold">
+        Welcome, {{ user?.name || "Guest" }}
+      </h1>
+      <p class="text-sm">
+        User ID: {{ user?._id }} | Quiz: {{ currentQuiz?.title }}<
+      </p>
     </div>
 
     <div class="h-12 w-12">
@@ -37,7 +41,9 @@
       <div class="flex justify-between items-center p-2 border-b-2">
         <!-- Question Info -->
         <div class="">
-          <h2 class="text-xl font-bold">Question 2 of 20</h2>
+          <h2 class="text-xl font-bold">
+            Question {{ currentIndex + 1 }} of {{ questions.length }}
+          </h2>
         </div>
         <!-- Timer and Calculator -->
         <!-- Timer and Calculator Inline -->
@@ -53,70 +59,48 @@
 
       <!-- Question Text -->
       <p class="text-lg font-semibold mb-6 mt-4 overflow-x-auto">
-        Which planet is known as the Red Planet? Lorem ipsum dolor sit amet
-        consectetur adipisicing elit. Itaque qui impedit assumenda iusto
-        repellat quod minima odio eius officiis provident.
+        {{ questions[currentIndex]?.questionText }}
       </p>
 
+      <!-- Options -->
       <div class="space-y-3 mb-6">
         <label
+          *ngFor="let option of questions[currentIndex]?.options; let i = index"
           class="flex items-start gap-2 p-3 border rounded hover:bg-blue-50 cursor-pointer"
         >
-          <input type="radio" name="answer" class="mt-1" />
-          <span class="w-5 shrink-0">A.</span>
-          <span>
-            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Ullam repudiandae dolor a est placeat cumque.
-          </span>
-        </label>
-        <label
-          class="flex items-start gap-2 p-3 border rounded hover:bg-blue-50 cursor-pointer"
-        >
-          <input type="radio" name="answer" class="mt-1" />
-          <span class="w-5 shrink-0">A.</span>
-          <span>
-            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Ullam repudiandae dolor a est placeat cumque.
-          </span>
-        </label>
-        <label
-          class="flex items-start gap-2 p-3 border rounded hover:bg-blue-50 cursor-pointer"
-        >
-          <input type="radio" name="answer" class="mt-1" />
-          <span class="w-5 shrink-0">A.</span>
-          <span>
-            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Ullam repudiandae dolor a est placeat cumque.
-          </span>
-        </label>
-        <label
-          class="flex items-start gap-2 p-3 border rounded hover:bg-blue-50 cursor-pointer"
-        >
-          <input type="radio" name="answer" class="mt-1" />
-          <span class="w-5 shrink-0">A.</span>
-          <span>
-            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet consectetur
-            adipisicing elit. Ullam repudiandae dolor a est placeat cumque.
-          </span>
+          <input
+            type="radio"
+            name="answer"
+            class="mt-1"
+            [value]="option"
+            (change)="selectAnswer(option)"
+            [checked]="selectedAnswers[currentIndex] === option"
+          />
+          <span class="w-5 shrink-0">{{ getOptionLetter(i) }}.</span>
+
+          <span>{{ option }}</span>
         </label>
       </div>
 
       <!-- Navigation Buttons -->
       <div class="flex justify-between mt-6">
         <button
-          class="bg-gray-400 text-white px-4 py-2 rounded cursor-not-allowed"
-          disabled
+          class="bg-gray-400 text-white px-4 py-2 rounded"
+          [disabled]="currentIndex === 0"
+          (click)="prevQuestion()"
         >
           ⬅️ Previous
         </button>
         <button
           class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
-          onclick="confirmSubmit()"
+          (click)="submitQuiz()"
         >
           Submit
         </button>
         <button
           class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+          [disabled]="currentIndex === questions.length - 1"
+          (click)="nextQuestion()"
         >
           Next ➡️
         </button>
@@ -129,30 +113,26 @@
     >
       <!-- Right Navbar Title -->
       <div class="mb-4">
-        <h3 class="text-lg font-semibold">Total Questions: 20</h3>
+        <h3 class="text-lg font-semibold">
+          Total Questions: {{ questions.length }}
+        </h3>
       </div>
 
       <!-- Question Numbers -->
       <div class="grid grid-cols-5 gap-2 mb-6">
-        <button class="w-10 h-10 rounded-full bg-blue-500 text-white">1</button>
-        <button class="w-10 h-10 rounded-full bg-green-500 text-white">
-          2
+        <button
+          *ngFor="let q of questions; let idx = index"
+          class="w-10 h-10 rounded-full"
+          [ngClass]="{
+            'bg-green-500 text-white': selectedAnswers[idx],
+            'bg-blue-500 text-white':
+              !selectedAnswers[idx] && idx !== currentIndex,
+            'bg-red-500 text-white': idx === currentIndex
+          }"
+          (click)="currentIndex = idx"
+        >
+          {{ idx + 1 }}
         </button>
-        <button class="w-10 h-10 rounded-full bg-gray-400 text-white">3</button>
-        <button class="w-10 h-10 rounded-full bg-blue-500 text-white">4</button>
-        <button class="w-10 h-10 rounded-full bg-green-500 text-white">
-          5
-        </button>
-        <button class="w-10 h-10 rounded-full bg-blue-500 text-white">6</button>
-        <button class="w-10 h-10 rounded-full bg-gray-400 text-white">7</button>
-        <button class="w-10 h-10 rounded-full bg-green-500 text-white">
-          8
-        </button>
-        <button class="w-10 h-10 rounded-full bg-gray-400 text-white">9</button>
-        <button class="w-10 h-10 rounded-full bg-green-500 text-white">
-          10
-        </button>
-        <!-- Add more as needed -->
       </div>
 
       <!-- Legend -->
