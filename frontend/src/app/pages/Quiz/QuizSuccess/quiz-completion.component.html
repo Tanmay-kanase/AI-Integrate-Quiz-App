@@ -1,0 +1,87 @@
+<div
+  class="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 p-4"
+>
+  <div
+    class="bg-white dark:bg-gray-800 rounded-lg shadow-2xl overflow-hidden max-w-2xl w-full p-8 transition-transform transform hover:scale-105 duration-300 ease-in-out"
+  >
+    <div class="text-center mb-8">
+      <div class="text-4xl text-green-500 mb-4 animate-bounce">🎉</div>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+        Quiz Completed!
+      </h1>
+      <p class="mt-2 text-xl text-gray-600 dark:text-gray-400">
+        Congratulations,
+        <span class="text-indigo-600 font-semibold">{{ userName }}</span
+        >!
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-center">
+      <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+          Quiz Title
+        </h2>
+        <p class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">
+          {{ quizTitle }}
+        </p>
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+          Your Score
+        </h2>
+        <p class="text-4xl font-extrabold text-green-500">
+          {{ score }} / {{ totalQuestions }}
+        </p>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <span class="text-lg font-bold">{{ percentage }}%</span> correct
+        </p>
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+          Time Allotted
+        </h2>
+        <p class="text-2xl font-bold text-gray-700 dark:text-gray-300">
+          {{ quizTime }}
+        </p>
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg shadow-md">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-2">
+          Time Taken
+        </h2>
+        <p class="text-2xl font-bold text-gray-700 dark:text-gray-300">
+          {{ timeTaken }}
+        </p>
+      </div>
+    </div>
+
+    <div class="mt-10 text-center">
+      <button
+        (click)="downloadCertificate()"
+        class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transform hover:scale-105 transition-transform duration-200 ease-in-out"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-6 w-6 mr-3"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2v-5a2 2 0 012-2h2.293a2 2 0 001.414-.586l.293-.293A2 2 0 0115.707 5h2.293a2 2 0 012 2v5a2 2 0 01-2 2z"
+          />
+        </svg>
+        Download Certificate
+      </button>
+    </div>
+
+    <div class="mt-8 text-center text-sm text-gray-500 dark:text-gray-400">
+      <p>
+        Thank you for completing the quiz. You can now download your
+        certificate.
+      </p>
+    </div>
+  </div>
+</div>
