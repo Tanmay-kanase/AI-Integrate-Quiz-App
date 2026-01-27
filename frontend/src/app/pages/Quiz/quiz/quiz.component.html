@@ -10,8 +10,21 @@
   ></app-instructions>
 </div>
 
+<!-- Quiz Completion Page -->
+<div *ngIf="showCompletionPage">
+  <app-quiz-completion
+    [quizTitle]="currentQuiz?.title"
+    [userName]="user?.name"
+    [score]="quizResult?.score"
+    [totalQuestions]="questions.length"
+    [quizTime]="currentQuiz?.time + ' minutes'"
+    [timeTaken]="quizResult?.timeTaken"
+  >
+  </app-quiz-completion>
+</div>
+
 <!-- Main container -->
-<div *ngIf="!showInstructions" class="m-0 p-0">
+<div *ngIf="!showInstructions && !showCompletionPage" class="m-0 p-0">
   <!-- Top Navbar -->
   <div
     class="flex justify-between items-center border-b p-4 gradient-bg text-white"
