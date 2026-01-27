@@ -1,18 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { environment } from '../../environment/environment'; // Adjust path if needed
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-signup',
   standalone: true,
-  imports: [FormsModule, HttpClientModule, CommonModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './signup.html',
   styleUrls: ['./signup.scss'],
 })
 export class Signup {
+  http = inject(HttpClient);
   confirmPassword: string = '';
 
   formData = {
@@ -25,7 +26,10 @@ export class Signup {
   message: string = '';
   messageType: 'success' | 'error' = 'success';
 
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   onFileChange(event: any): void {
     const file = event.target.files[0];
@@ -45,27 +49,23 @@ export class Signup {
       email: this.formData.email,
       password: this.formData.password,
     };
-    
 
-    const apiUrl = `${environment.apiUrl}/api/users/register`;
-
-    this.http.post<{ token: string; user: any }>(apiUrl, payload).subscribe({
-      next: (res) => {
-        localStorage.setItem('token', res.token);
-        localStorage.setItem('user', JSON.stringify(res.user));
-
-        this.message = '🎉 Sign up successful!';
-        this.messageType = 'success';
-
-        // ✅ Redirect to home after 1 second
-        setTimeout(() => {
+    this.authService
+      .signup({
+        name: this.formData.name,
+        email: this.formData.email,
+        password: this.formData.password,
+      })
+      .subscribe({
+        next: () => {
+          this.message = '🎉 Sign up successful!';
+          this.messageType = 'success';
           this.router.navigate(['/']);
-        }, 1000);
-      },
-      error: (err) => {
-        this.message = err.error?.message || '❌ Registration failed.';
-        this.messageType = 'error';
-      },
-    });
+        },
+        error: (err) => {
+          this.message = err.error?.message || '❌ Registration failed.';
+          this.messageType = 'error';
+        },
+      });
   }
 }
