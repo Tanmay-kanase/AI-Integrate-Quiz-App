@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // For *ngIf, if needed
 import { FormsModule } from '@angular/forms'; // For [(ngModel)]
 import { Router, RouterLink } from '@angular/router'; // For navigation and routerLink
-
+import { AuthService } from '../../services/auth';
 @Component({
   selector: 'app-signin',
   standalone: true,
@@ -18,8 +18,13 @@ import { Router, RouterLink } from '@angular/router'; // For navigation and rout
 export class SigninComponent implements OnInit {
   email = '';
   password = '';
+  message = '';
+  messageType: 'success' | 'error' | '' = '';
 
-  constructor(private router: Router) {} // Inject Router for navigation
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+  ) {} // Inject Router for navigation and HttpClient
 
   ngOnInit(): void {
     // Initialization logic if needed
@@ -31,15 +36,24 @@ export class SigninComponent implements OnInit {
    */
   onSubmit(): void {
     if (!this.email || !this.password) {
-      console.warn('Please enter both email and password.');
-      // You'd typically show an error message on the UI
+      this.message = '❌ Please enter both email and password.';
+      this.messageType = 'error';
       return;
     }
-    console.log('Attempting to sign in with email:', this.email);
-    console.log('Password:', this.password);
-    // TODO: Implement actual authentication logic here (e.g., call an AuthService)
-    // On success:
-    // this.router.navigate(['/dashboard']); // Navigate to a dashboard or home page
+
+    this.authService
+      .login({ email: this.email, password: this.password })
+      .subscribe({
+        next: () => {
+          this.message = 'Signin Successfull';
+          this.messageType = 'success';
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          this.message = err.error?.message || 'Invalid Email and Password !!';
+          this.messageType = 'error';
+        },
+      });
   }
 
   /**

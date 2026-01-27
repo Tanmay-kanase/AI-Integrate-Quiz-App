@@ -3,68 +3,251 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quiz Completed</title>
+    <title>AI Quiz Master | Personalized Learning</title>
+    <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configure Tailwind to use Inter font and apply modern styles -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Inter", "sans-serif"],
+            },
+            colors: {
+              primary: "#4f46e5", // Indigo
+              secondary: "#8b5cf6", // Violet
+              accent: "#10b981", // Emerald
+              "dark-bg": "#0f172a", // Slate-900
+              "dark-card": "#1e293b", // Slate-800
+            },
+            keyframes: {
+              fadeInUp: {
+                "0%": { opacity: "0", transform: "translateY(20px)" },
+                "100%": { opacity: "1", transform: "translateY(0)" },
+              },
+            },
+            animation: {
+              "fade-in-up": "fadeInUp 0.6s ease-out",
+            },
+          },
+        },
+      };
+    </script>
     <style>
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(20px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-      .fade-in-element {
-        animation: fadeIn 0.8s ease-out forwards;
-      }
+      /* Custom font import for aesthetics */
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
     </style>
   </head>
-  <body
-    class="bg-gray-900 text-white flex items-center justify-center min-h-screen p-4"
-  >
-    <div
-      class="bg-gray-800 p-12 rounded-2xl shadow-2xl max-w-lg w-full transform transition-all hover:scale-105 duration-300"
-    >
-      <div class="text-center">
-        <h1 class="text-5xl font-extrabold text-teal-400 mb-2 fade-in-element">
-          Quiz Completed!
-        </h1>
-        <p
-          class="text-gray-400 text-lg mb-8 fade-in-element"
-          style="animation-delay: 0.2s"
-        >
-          Thanks for attending the quiz.
-        </p>
-      </div>
-
-      <div
-        class="bg-gray-700 p-8 rounded-xl mb-8 border border-gray-600 fade-in-element"
-        style="animation-delay: 0.4s"
+  <body class="bg-dark-bg text-gray-100 font-sans min-h-screen">
+    <!-- Main Content Wrapper -->
+    <div class="container mx-auto px-4 py-12 sm:px-6 lg:px-8 max-w-7xl">
+      <!-- 1. Hero Section: Catchy Title and AI Value Prop -->
+      <section
+        class="text-center py-16 sm:py-24 animate-fade-in-up"
+        style="animation-delay: 0.1s"
       >
-        <h2 class="text-2xl font-bold mb-4 text-center">Your Result</h2>
-        <div class="flex flex-col items-center space-y-4">
-          <div class="text-4xl font-bold tracking-wider text-green-400">
-            <span class="text-green-400">Pass</span>
+        <div class="max-w-4xl mx-auto">
+          <span
+            class="inline-block bg-secondary/20 text-secondary text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-widest mb-4 shadow-lg"
+          >
+            🧠 AI-Powered Quizzing
+          </span>
+          <h1
+            class="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight mb-6 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary"
+          >
+            Learn Faster. Quiz Smarter.
+          </h1>
+          <p class="text-xl sm:text-2xl text-gray-400 mb-10 max-w-3xl mx-auto">
+            Generate personalized quizzes on any topic, get instant, detailed
+            feedback, and master any subject with our cutting-edge AI
+            integration.
+          </p>
+
+          <!-- CTA Button -->
+          <div class="flex justify-center space-x-4">
+            <button
+              class="px-8 py-3 text-lg font-bold text-white bg-primary hover:bg-secondary rounded-xl transition duration-300 transform hover:scale-105 shadow-xl shadow-primary/30 focus:outline-none focus:ring-4 focus:ring-primary/50"
+            >
+              Start Your Free Quiz Today
+            </button>
+            <button
+              class="px-8 py-3 text-lg font-semibold text-white border-2 border-gray-600 bg-transparent hover:bg-dark-card rounded-xl transition duration-300 transform hover:scale-105 shadow-lg focus:outline-none focus:ring-4 focus:ring-gray-600/50"
+            >
+              See How It Works
+            </button>
           </div>
-          <div class="text-6xl font-extrabold text-white">
-            85<span class="text-3xl font-light">%</span>
-          </div>
-          <p class="text-gray-400">You scored 85 out of 100.</p>
         </div>
+      </section>
+
+      <!-- Separator with AI flair -->
+      <div class="flex justify-center my-16">
+        <div
+          class="w-20 h-1 bg-gradient-to-r from-accent to-secondary rounded-full"
+        ></div>
       </div>
 
-      <div class="text-center fade-in-element" style="animation-delay: 0.6s">
-        <button
-          class="bg-gradient-to-r from-teal-500 to-teal-700 hover:from-teal-600 hover:to-teal-800 text-white font-bold py-4 px-8 rounded-full shadow-lg transform transition-transform duration-300 hover:scale-105 focus:outline-none focus:ring-4 focus:ring-teal-500 focus:ring-opacity-50"
+      <!-- 2. Features Section: Highlight AI Integration -->
+      <section class="py-12 sm:py-20">
+        <h2
+          class="text-3xl sm:text-4xl font-bold text-center mb-12 text-gray-50 animate-fade-in-up"
+          style="animation-delay: 0.3s"
         >
-          Download Certificate
-        </button>
-        <p class="mt-4 text-sm text-gray-500">
-          Please note: The certificate will be downloaded as a PDF.
+          The Power of AI in Your Hands
+        </h2>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <!-- Feature Card 1: Dynamic Question Generation -->
+          <div
+            class="bg-dark-card p-6 rounded-2xl shadow-2xl border border-gray-700 hover:border-accent transition duration-300 animate-fade-in-up"
+            style="animation-delay: 0.4s"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-primary/20 text-primary"
+            >
+              <!-- Icon: Magic Wand (for generation) -->
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-white">
+              Dynamic Quiz Generation
+            </h3>
+            <p class="text-gray-400">
+              The AI instantly reads your input (notes, text, URLs) and
+              generates highly relevant and diverse question types (MCQ,
+              true/false, open-ended).
+            </p>
+          </div>
+
+          <!-- Feature Card 2: Personalized Learning Paths -->
+          <div
+            class="bg-dark-card p-6 rounded-2xl shadow-2xl border border-gray-700 hover:border-secondary transition duration-300 animate-fade-in-up"
+            style="animation-delay: 0.5s"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-secondary/20 text-secondary"
+            >
+              <!-- Icon: Target/Bullseye (for personalization) -->
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-white">
+              Adaptive Difficulty
+            </h3>
+            <p class="text-gray-400">
+              The system identifies your weak areas and automatically adjusts
+              the difficulty and focus of the next quiz, ensuring efficient
+              study time.
+            </p>
+          </div>
+
+          <!-- Feature Card 3: In-Depth Explanations -->
+          <div
+            class="bg-dark-card p-6 rounded-2xl shadow-2xl border border-gray-700 hover:border-primary transition duration-300 animate-fade-in-up"
+            style="animation-delay: 0.6s"
+          >
+            <div
+              class="flex items-center justify-center w-12 h-12 mb-4 rounded-full bg-accent/20 text-accent"
+            >
+              <!-- Icon: Lightbulb (for insight) -->
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                ></path>
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2 text-white">
+              Contextual Correction
+            </h3>
+            <p class="text-gray-400">
+              Beyond just "right" or "wrong," the AI provides comprehensive,
+              easy-to-understand explanations for every incorrect answer.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Mockup/Demo Section (Placeholder for Visual Proof) -->
+      <section class="py-12 sm:py-20 text-center">
+        <h2
+          class="text-3xl sm:text-4xl font-bold mb-6 text-gray-50 animate-fade-in-up"
+          style="animation-delay: 0.7s"
+        >
+          The Interface of Intelligent Learning
+        </h2>
+        <p
+          class="text-xl text-gray-400 mb-10 max-w-3xl mx-auto animate-fade-in-up"
+          style="animation-delay: 0.8s"
+        >
+          Experience a clean, distraction-free interface designed for deep focus
+          and optimal retention across all devices.
         </p>
-      </div>
+
+        <!-- Placeholder for a sleek, responsive screenshot/mockup -->
+        <div
+          class="max-w-4xl mx-auto rounded-3xl overflow-hidden shadow-2xl shadow-primary/20 border-4 border-gray-700 animate-fade-in-up"
+          style="animation-delay: 0.9s"
+        >
+          <img
+            src="https://placehold.co/1024x576/0f172a/60a5fa?text=AI+Quiz+App+Mockup"
+            alt="Mockup of the AI Quiz App Interface"
+            class="w-full h-auto"
+            onerror="this.onerror=null; this.src='https://placehold.co/1024x576/0f172a/60a5fa?text=AI+Quiz+App+Mockup';"
+          />
+        </div>
+      </section>
+
+      <!-- 4. Final Call to Action Block (Replacement for Footer) -->
+      <section
+        class="my-16 py-12 px-6 bg-gradient-to-r from-dark-card to-dark-bg rounded-3xl shadow-2xl shadow-secondary/20 border border-secondary/50 text-center animate-fade-in-up"
+        style="animation-delay: 1s"
+      >
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-white mb-4">
+          Ready to Revolutionize Your Study Habits?
+        </h2>
+        <p class="text-lg text-gray-300 mb-8 max-w-2xl mx-auto">
+          Join thousands of students and professionals who are leveraging AI to
+          achieve their learning goals faster than ever before.
+        </p>
+        <button
+          class="px-10 py-4 text-xl font-extrabold text-dark-bg bg-accent hover:bg-green-300 rounded-full transition duration-300 transform hover:scale-105 shadow-xl shadow-accent/40 focus:outline-none focus:ring-4 focus:ring-accent/50"
+        >
+          🚀 Sign Up Now
+        </button>
+      </section>
     </div>
   </body>
 </html>

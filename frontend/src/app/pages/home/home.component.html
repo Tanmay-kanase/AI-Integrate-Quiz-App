@@ -1,4 +1,11 @@
 <app-navbar></app-navbar>
-<app-hero></app-hero>
-<app-quizzes></app-quizzes>
+
+@if (!isLoggedIn) {
+  <app-hero></app-hero>
+  <app-quizzes></app-quizzes>
+} @else {
+  <app-hero></app-hero>
+  <app-quizzes></app-quizzes>
+}
+
 <app-footer></app-footer>

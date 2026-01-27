@@ -11,6 +11,7 @@ import { AppLoading } from './shared/app-loading/app-loading';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { CreateQuizComponent } from './pages/Quiz/createQuiz/createQuiz';
 import { AddQuestionsComponent } from './pages/Quiz/questions/add-questions';
+
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   {
@@ -19,14 +20,23 @@ export const routes: Routes = [
     children: [
       { path: 'home', component: HomeComponent },
       { path: 'about', component: AboutComponent },
-      { path: 'signup', component: Signup },
-      { path: 'signin', component: SigninComponent },
-      { path: 'create-quiz', component: CreateQuizComponent },
+      {
+        path: 'signup',
+        component: Signup
+      },
+      {
+        path: 'signin',
+        component: SigninComponent,
+      },
+      {
+        path: 'create-quiz',
+        component: CreateQuizComponent,
+      },
       {
         path: 'add-questions',
         loadComponent: () =>
           import('./pages/Quiz/questions/add-questions').then(
-            (m) => m.AddQuestionsComponent
+            (m) => m.AddQuestionsComponent,
           ),
       },
     ],
