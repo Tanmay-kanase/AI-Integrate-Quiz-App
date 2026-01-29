@@ -7,7 +7,13 @@ import { QuizzesComponent } from '../quizzes/quizzes.component';
 @Component({
   selector: 'app-hero',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, HttpClientModule, QuizzesComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    FormsModule,
+    HttpClientModule,
+    QuizzesComponent,
+  ],
   templateUrl: './hero.component.html',
   styleUrls: ['./hero.component.css'],
 })
@@ -18,7 +24,8 @@ export class HeroComponent {
   showGenerateButton = false;
   isLoading = false;
   showSpinner = false;
-
+  numQuestions: number = 10;
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced' = 'Intermediate';
   ngOnInit(): void {
     // Initialization logic if needed
   }
@@ -68,7 +75,7 @@ export class HeroComponent {
       this.showSpinner = false;
     }, 3000);
     const apiUrl = `http://localhost:5000/api/quiz-generation/${encodeURIComponent(
-      this.topic.trim()
+      this.topic.trim(),
     )}`;
     this.http.get(apiUrl).subscribe({
       next: (response) => {
