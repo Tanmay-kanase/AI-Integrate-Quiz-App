@@ -1,10 +1,18 @@
-import { Component, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  AfterViewInit,
+  OnDestroy,
+  OnInit,
+  Inject,
+  DOCUMENT,
+  HostListener,
+} from '@angular/core';
 import { InstructionsComponent } from '../../../shared/instructions/instructions.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { QuizCompletionComponent } from '../QuizSuccess/quiz-completion.component';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-quiz',
   standalone: true,
@@ -24,7 +32,13 @@ export class QuizComponent implements AfterViewInit, OnDestroy, OnInit {
   selectedAnswers: { [index: number]: string } = {};
   currentIndex = 0;
   token = localStorage.getItem('token');
-  constructor(private route: ActivatedRoute, private http: HttpClient) {}
+  isSubmitting = false;
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private router: Router,
+    @Inject(DOCUMENT) private document: Document,
+  ) {}
   timeLeft = 0;
   timerInterval: any;
   showInstructions: boolean = true;
@@ -90,9 +104,67 @@ export class QuizComponent implements AfterViewInit, OnDestroy, OnInit {
   handleQuizStart(): void {
     this.showInstructions = false;
     this.quizStartTime = Date.now(); // timestamp in ms
+    this.enterFullScreen();
     setTimeout(() => this.startTimer(), 0); // start after DOM updates
   }
 
+  // --- FULL SCREEN AND SECURITY LOGIC ---
+
+  enterFullScreen() {
+    const elem = this.document.documentElement;
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen().catch((err) => {
+        console.warn(`Error attempting to enable fullscreen: ${err.message}`);
+      });
+    }
+  }
+
+  exitFullScreen() {
+    if (this.document.fullscreenElement && this.document.exitFullscreen) {
+      this.document.exitFullscreen();
+    }
+  }
+
+  /** Triggers when user switches tabs or minimizes the window */
+  @HostListener('document:visibilitychange')
+  onVisibilityChange() {
+    if (this.document.hidden && this.isQuizActive()) {
+      this.handleViolation('Tab switching is not allowed.');
+    }
+  }
+
+  /** Triggers when the window loses focus (e.g., clicking on another monitor or app) */
+  @HostListener('window:blur')
+  onWindowBlur() {
+    if (this.isQuizActive()) {
+      this.handleViolation('Window lost focus. Please stay on the quiz page.');
+    }
+  }
+
+  /** Triggers when user presses ESC to exit full screen */
+  @HostListener('document:fullscreenchange')
+  onFullScreenChange() {
+    if (this.isSubmitting) {
+      return;
+    }
+
+    if (!this.document.fullscreenElement && this.isQuizActive()) {
+      this.handleViolation('Exiting full screen is not allowed.');
+    }
+  }
+
+  isQuizActive(): boolean {
+    return !this.showInstructions && !this.showCompletionPage;
+  }
+
+  handleViolation(message: string) {
+    // You can customize this to give them 1 warning before submitting,
+    // but strict mode auto-submits immediately.
+    alert(
+      `SECURITY WARNING: ${message}\n\nYour quiz is being automatically submitted.`,
+    );
+    this.submitQuiz();
+  }
   /** Timer countdown */
   startTimer() {
     const timerElement = document.getElementById('timer');
@@ -101,7 +173,7 @@ export class QuizComponent implements AfterViewInit, OnDestroy, OnInit {
       const minutes = Math.floor(this.timeLeft / 60);
       const seconds = this.timeLeft % 60;
       const display = `${String(minutes).padStart(2, '0')}:${String(
-        seconds
+        seconds,
       ).padStart(2, '0')}`;
       timerElement.textContent = display;
 
@@ -138,9 +210,21 @@ export class QuizComponent implements AfterViewInit, OnDestroy, OnInit {
       this.currentIndex--;
     }
   }
+  hasSubmitted = false;
 
   /** Submit quiz to backend */
   submitQuiz() {
+    if (this.hasSubmitted) {
+      return;
+    }
+
+    this.hasSubmitted = true;
+
+    this.isSubmitting = true;
+
+    clearInterval(this.timerInterval);
+
+    this.exitFullScreen();
     // Calculate time taken
     const timeTakenMs = Date.now() - this.quizStartTime;
     const minutes = Math.floor(timeTakenMs / 60000);
@@ -177,7 +261,18 @@ export class QuizComponent implements AfterViewInit, OnDestroy, OnInit {
         .subscribe({
           next: (res) => {
             console.log('Quiz submitted', res);
-            alert('Quiz submitted successfully!');
+
+            this.showCompletionPage = true;
+
+            if (this.currentQuiz?.codingAssessment) {
+              this.router.navigate(['/coding-assessment'], {
+                queryParams: {
+                  topicId: this.currentQuiz._id,
+                },
+              });
+
+              return;
+            }
             this.showCompletionPage = true;
           },
           error: (err) => console.error('Submit failed:', err),
@@ -190,6 +285,7 @@ export class QuizComponent implements AfterViewInit, OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
+    this.exitFullScreen();
     clearInterval(this.timerInterval);
   }
 }

@@ -29,15 +29,10 @@
     </svg>
   </div>
 
-  <div class="container mx-auto px-4 max-w-md relative z-10">
-    <div class="bg-white p-8 md:p-10 rounded-xl shadow-2xl text-gray-800">
+  <div class="container mx-auto px-4 max-w-md relative">
+    <div class="bg-white md:p-10 rounded-xl shadow-2xl text-gray-800">
       <!-- Top Section with Quotes -->
       <div class="text-center mb-8">
-        <p class="text-sm md:text-base text-gray-600 italic mb-2">
-          "The beautiful thing about learning is that no one can take it away
-          from you."
-        </p>
-        <p class="text-xs text-gray-500">- B.B. King</p>
         <p class="text-sm md:text-base text-gray-600 italic mt-4 mb-2">
           "Education is the most powerful weapon which you can use to change the
           world."
@@ -162,6 +157,19 @@
           </a>
         </div>
       </form>
+      <!-- Error / Success Message -->
+      <div
+        *ngIf="message"
+        class="mb-4 text-sm font-medium rounded-md px-4 py-3"
+        [ngClass]="{
+          'bg-red-100 text-red-700 border border-red-300':
+            messageType === 'error',
+          'bg-green-100 text-green-700 border border-green-300':
+            messageType === 'success',
+        }"
+      >
+        {{ message }}
+      </div>
     </div>
   </div>
 </section>

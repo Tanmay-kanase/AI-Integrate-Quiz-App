@@ -9,6 +9,7 @@ export interface IQuizTopic extends Document {
   createdBy?: Types.ObjectId;
   createdAt: Date;
   totalQuestions: number;
+  codingAssessment: boolean;
 }
 
 const quizTopicSchema = new Schema<IQuizTopic>({
@@ -18,6 +19,10 @@ const quizTopicSchema = new Schema<IQuizTopic>({
   time: { type: String }, // new field
   usersAttempted: { type: Number, default: 0 }, // new field
   totalQuestions: Number,
+  codingAssessment: {
+    type: Boolean,
+    default: false,
+  },
   createdBy: { type: Schema.Types.ObjectId, ref: "User" },
   createdAt: { type: Date, default: Date.now },
 });

@@ -3,7 +3,11 @@
 /* @tailwind base;
 @tailwind components; */
 @tailwind utilities;
-
+html {
+  transition:
+    background-color 0.3s,
+    color 0.3s;
+}
 body {
   font-family: "Inter", sans-serif;
   background-color: #f8fafc; /* Light gray background */

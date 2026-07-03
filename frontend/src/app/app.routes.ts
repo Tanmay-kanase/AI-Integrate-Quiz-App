@@ -16,6 +16,13 @@ import { authGuard } from './guards/auth-guard';
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   {
+    path: 'coding-assessment',
+    loadComponent: () =>
+      import('./pages/coding-assessment/coding-assessment').then(
+        (m) => m.CodingAssessment,
+      ),
+  },
+  {
     path: '',
     component: Layout, // Wrapper with Navbar + Footer
     children: [

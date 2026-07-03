@@ -11,6 +11,6 @@ const quizTopicRouter = Router();
 
 quizTopicRouter.post("/", authenticate, createQuizTopic);
 quizTopicRouter.get("/", authenticate, getAllQuizTopics);
-quizTopicRouter.get("/:id", authenticate, getQuizTopicById);
+quizTopicRouter.get("/:id", getQuizTopicById);
 quizTopicRouter.post("/:id/submit", authenticate, submitQuiz);
 export default quizTopicRouter;

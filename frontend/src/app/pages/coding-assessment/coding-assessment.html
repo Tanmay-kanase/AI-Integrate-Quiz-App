@@ -1,0 +1,209 @@
+<div
+  *ngIf="!showCompletionPage"
+  class="bg-gray-50 text-gray-800 font-sans h-screen flex flex-col overflow-hidden"
+>
+  <header
+    class="bg-white shadow-sm border-b border-gray-200 px-6 py-3 flex justify-between items-center z-10"
+  >
+    <div class="flex items-center space-x-3">
+      <div
+        class="w-8 h-8 bg-blue-600 text-white rounded flex items-center justify-center font-bold text-lg"
+      >
+        &lt;/&gt;
+      </div>
+      <h1 class="text-lg font-semibold text-gray-800">Code Assessment</h1>
+    </div>
+
+    <div class="flex items-center space-x-3">
+      <label for="language" class="text-sm font-medium text-gray-600"
+        >Language:</label
+      >
+      <select
+        id="language"
+        [(ngModel)]="language"
+        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 outline-none cursor-pointer"
+      >
+        <option value="c">C</option>
+        <option value="cpp">C++</option>
+        <option value="java">Java</option>
+        <option value="python" selected>Python</option>
+        <option value="perl">Perl</option>
+        <option value="javascript">JavaScript</option>
+      </select>
+    </div>
+
+    <div class="bg-red-50 border border-red-200 px-4 py-2 rounded-lg">
+      <span class="font-bold text-red-600"> {{ formattedTime }} </span>
+    </div>
+  </header>
+
+  <main class="flex-1 flex overflow-hidden">
+    <div
+      id="left-panel"
+      [style.width.%]="leftPanelWidth"
+      class="p-8 overflow-y-auto bg-white flex-shrink-0"
+      style="width: 50%; min-width: 25%; max-width: 75%"
+    >
+      <h2 class="text-2xl font-bold mb-2">{{ assessment?.title }}</h2>
+
+      <div class="flex space-x-2 mb-6">
+        <span
+          class="px-2 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded"
+          >Easy</span
+        >
+        <span
+          class="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-semibold rounded"
+          >Arrays</span
+        >
+        <span
+          class="px-2 py-1 bg-gray-100 text-gray-600 text-xs font-semibold rounded"
+          >Math</span
+        >
+      </div>
+
+      <div class="prose max-w-none text-gray-600 mb-8 text-sm leading-relaxed">
+        <p class="mb-4">{{ assessment?.description }}</p>
+
+        <p class="font-semibold text-gray-800 mt-6 mb-2">Constraints:</p>
+        <ul class="list-disc pl-5 mb-4">
+          <li *ngFor="let constraint of assessment?.constraints">
+            <code>{{ constraint }}</code>
+          </li>
+        </ul>
+      </div>
+
+      <h3 class="text-lg font-semibold mb-4 text-gray-800 border-b pb-2">
+        Test Cases
+      </h3>
+
+      <div
+        *ngFor="
+    let example of assessment?.examples;
+    let i = index
+  "
+        class="bg-gray-50 rounded-lg p-4 mb-4 border border-gray-200"
+      >
+        <h4 class="font-semibold text-sm text-gray-700 mb-3">
+          Example {{ i + 1 }}
+        </h4>
+
+        <div class="mb-3">
+          <span
+            class="text-xs font-bold uppercase tracking-wider text-gray-500 block mb-1"
+          >
+            Input:
+          </span>
+
+          <div
+            class="bg-white border border-gray-200 rounded p-2 text-sm font-mono"
+          >
+            {{ example.inputDisplay }}
+          </div>
+        </div>
+
+        <div>
+          <span
+            class="text-xs font-bold uppercase tracking-wider text-gray-500 block mb-1"
+          >
+            Output:
+          </span>
+
+          <div
+            class="bg-white border border-gray-200 rounded p-2 text-sm font-mono"
+          >
+            {{ example.outputDisplay }}
+          </div>
+        </div>
+
+        <div *ngIf="example.explanation" class="mt-3 text-sm text-gray-600">
+          {{ example.explanation }}
+        </div>
+      </div>
+    </div>
+
+    <div
+      id="drag-bar"
+      (mousedown)="startResize()"
+      class="w-1.5 bg-gray-200 hover:bg-blue-500 cursor-col-resize flex flex-col justify-center items-center transition-colors z-20 shadow-sm relative group"
+    >
+      <div
+        class="h-8 w-1 bg-gray-400 group-hover:bg-white rounded-full transition-colors"
+      ></div>
+    </div>
+
+    <div id="right-panel" class="flex-1 flex flex-col bg-[#1e1e1e] min-w-[25%]">
+      <div class="bg-[#2d2d2d] border-b border-black flex px-4 pt-2">
+        <div
+          class="bg-[#1e1e1e] text-gray-300 text-sm py-2 px-4 border-t-2 border-blue-500 inline-block font-mono"
+        >
+          solution.{{ language }}
+        </div>
+      </div>
+
+      <div class="flex-1 p-4 flex flex-col relative">
+        <div
+          class="absolute left-4 top-4 bottom-4 w-8 text-right text-gray-500 font-mono text-sm leading-6 select-none pointer-events-none"
+        >
+          1<br />2<br />3<br />4<br />5
+        </div>
+
+        <textarea
+          [(ngModel)]="code"
+          class="w-full flex-1 bg-[#1e1e1e] text-[#d4d4d4] font-mono text-sm pl-10 p-2 rounded-none border-none focus:outline-none focus:ring-0 resize-none leading-6"
+          spellcheck="false"
+        >
+class Solution:
+    def missingNumber(self, nums):
+        # Write your code here
+        pass
+                </textarea
+        >
+      </div>
+
+      <div
+        class="bg-[#2d2d2d] border-t border-black px-6 py-4 flex justify-between items-center"
+      >
+        <div class="text-xs text-gray-400 flex items-center">
+          <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
+          Ready to compile
+        </div>
+
+        <div class="flex space-x-3">
+          <button
+            (click)="runCode()"
+            [disabled]="isRunning"
+            class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded disabled:opacity-50"
+          >
+            <span *ngIf="!isRunning">Run Code</span>
+            <span *ngIf="isRunning">⏳ Running...</span>
+          </button>
+
+          <button
+            (click)="submitCode()"
+            [disabled]="isSubmitting"
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded disabled:opacity-50"
+          >
+            <span *ngIf="!isSubmitting">Submit</span>
+            <span *ngIf="isSubmitting">⏳ Submitting...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<div
+  *ngIf="showCompletionPage"
+  class="h-screen flex items-center justify-center bg-white"
+>
+  <div class="text-center">
+    <h1 class="text-4xl font-bold mb-4">Thank You!</h1>
+
+    <p class="text-gray-600 mb-6">
+      Your coding assessment has been submitted successfully.
+    </p>
+
+    <button (click)="goHome()" class="bg-blue-600 text-white px-6 py-3 rounded">
+      Exit Assessment
+    </button>
+  </div>
+</div>
