@@ -1,66 +1,61 @@
-<!-- instructions.component.html (Enhanced) -->
 <div
-  class="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-purple-100 to-red-100 p-4 sm:p-6 md:p-8"
+  class="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-100 via-purple-100 to-red-100 p-3 sm:p-4"
 >
   <div
-    class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8 md:p-10 max-w-3xl w-full border border-gray-200 transform hover:scale-[1.01] transition-transform duration-300 ease-in-out"
+    class="bg-white rounded-2xl shadow-2xl p-4 sm:p-6 md:p-7 max-w-7xl w-full border border-gray-200 transform hover:scale-[1.005] transition-transform duration-300 ease-in-out"
   >
-    <h2
-      class="text-4xl sm:text-5xl font-extrabold text-center text-gray-800 mb-8 pb-4 relative"
-    >
-      <span
-        class="bg-gradient-to-r from-indigo-600 to-purple-700 text-transparent bg-clip-text"
-        >Quiz Guidelines</span
-      >
-      <span
-        class="absolute bottom-0 left-1/2 -translate-x-1/2 w-24 h-1 bg-indigo-500 rounded-full"
-      ></span>
-    </h2>
-    <!-- Quiz Details Section -->
+    <!-- Heading -->
+
+    <!-- Quiz Details -->
     <div
-      class="bg-gray-50 p-6 rounded-lg shadow-inner mb-8 border border-gray-200"
+      class="bg-gray-50 p-4 rounded-lg shadow-inner mb-5 border border-gray-200"
     >
-      <h3 class="font-bold text-2xl text-center text-gray-800 mb-4">
+      <h3 class="font-bold text-xl text-center text-gray-800 mb-3">
         Quiz Information
       </h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-lg">
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-base">
         <p>
           <strong class="text-indigo-700">Title:</strong>
           {{ quizTitle || "Loading Quiz Title..." }}
         </p>
+
         <p>
           <strong class="text-indigo-700">Category:</strong>
           {{ quizCategory || "Loading Category..." }}
         </p>
-        <p class="sm:col-span-2">
+
+        <p>
           <strong class="text-indigo-700">Total Questions:</strong>
           {{ quizTotalQuestions || "N/A" }}
         </p>
-        <p class="sm:col-span-2">
-          <strong class="text-indigo-700">Time :</strong>
+
+        <p>
+          <strong class="text-indigo-700">Time:</strong>
           {{ time || "N/A" }}
         </p>
+
         <p class="sm:col-span-2">
           <strong class="text-indigo-700">Description:</strong>
           {{ quizDescription || "Loading Description..." }}
         </p>
       </div>
     </div>
-    <!-- End Quiz Details Section -->
-    <p
-      class="text-lg sm:text-xl text-gray-600 text-center mb-8 leading-relaxed"
-    >
+
+    <!-- Introduction -->
+    <p class="text-base text-gray-600 text-center mb-5 leading-relaxed">
       Please review these essential rules to ensure a fair and successful quiz
       experience.
     </p>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 text-gray-700">
+    <!-- Guidelines Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 text-gray-700">
       <!-- Time Limit -->
       <div
-        class="flex items-start bg-blue-50 p-4 rounded-lg shadow-sm border border-blue-200"
+        class="flex items-start bg-blue-50 p-3 rounded-lg shadow-sm border border-blue-200"
       >
         <svg
-          class="w-8 h-8 mr-4 flex-shrink-0"
+          class="w-7 h-7 mr-3 flex-shrink-0"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -74,26 +69,27 @@
             class="text-blue-600"
           ></path>
         </svg>
+
         <div>
-          <h3 class="font-bold text-xl text-blue-800 mb-1">
+          <h3 class="font-bold text-lg text-blue-800 mb-1">
             Strict Time Limit
           </h3>
-          <p class="text-gray-700">
+          <p class="text-sm text-gray-700">
             You have
-            <span class="font-extrabold text-blue-700"
-              >{{ time || "N\A" }} minutes</span
-            >
+            <span class="font-extrabold text-blue-700">
+              {{ time || "N/A" }} minutes
+            </span>
             to complete the quiz. Manage your time wisely.
           </p>
         </div>
       </div>
 
-      <!-- No Copy-Paste -->
+      <!-- No Copy Paste -->
       <div
-        class="flex items-start bg-red-50 p-4 rounded-lg shadow-sm border border-red-200"
+        class="flex items-start bg-red-50 p-3 rounded-lg shadow-sm border border-red-200"
       >
         <svg
-          class="w-8 h-8 mr-4 flex-shrink-0"
+          class="w-7 h-7 mr-3 flex-shrink-0"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -107,11 +103,12 @@
             class="text-red-600"
           ></path>
         </svg>
+
         <div>
-          <h3 class="font-bold text-xl text-red-800 mb-1">
+          <h3 class="font-bold text-lg text-red-800 mb-1">
             Original Answers Only
           </h3>
-          <p class="text-gray-700">
+          <p class="text-sm text-gray-700">
             Copying and pasting content from any source is strictly prohibited.
             Your work must be original.
           </p>
@@ -120,10 +117,10 @@
 
       <!-- No AI Tools -->
       <div
-        class="flex items-start bg-yellow-50 p-4 rounded-lg shadow-sm border border-yellow-200"
+        class="flex items-start bg-yellow-50 p-3 rounded-lg shadow-sm border border-yellow-200"
       >
         <svg
-          class="w-8 h-8 mr-4 flex-shrink-0"
+          class="w-7 h-7 mr-3 flex-shrink-0"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -137,23 +134,24 @@
             class="text-yellow-600"
           ></path>
         </svg>
+
         <div>
-          <h3 class="font-bold text-xl text-yellow-800 mb-1">
+          <h3 class="font-bold text-lg text-yellow-800 mb-1">
             No AI Assistance
           </h3>
-          <p class="text-gray-700">
+          <p class="text-sm text-gray-700">
             The use of AI tools or generative models is forbidden. All responses
             must reflect your own knowledge.
           </p>
         </div>
       </div>
 
-      <!-- No Window Switching -->
+      <!-- Window Switching -->
       <div
-        class="flex items-start bg-purple-50 p-4 rounded-lg shadow-sm border border-purple-200"
+        class="flex items-start bg-purple-50 p-3 rounded-lg shadow-sm border border-purple-200"
       >
         <svg
-          class="w-8 h-8 mr-4 flex-shrink-0"
+          class="w-7 h-7 mr-3 flex-shrink-0"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -167,21 +165,22 @@
             class="text-purple-600"
           ></path>
         </svg>
+
         <div>
-          <h3 class="font-bold text-xl text-purple-800 mb-1">Stay Focused</h3>
-          <p class="text-gray-700">
+          <h3 class="font-bold text-lg text-purple-800 mb-1">Stay Focused</h3>
+          <p class="text-sm text-gray-700">
             Avoid switching between tabs or applications during the quiz. This
             may lead to disqualification.
           </p>
         </div>
       </div>
 
-      <!-- Internet Connectivity -->
+      <!-- Internet -->
       <div
-        class="flex items-start bg-green-50 p-4 rounded-lg shadow-sm border border-green-200"
+        class="flex items-start bg-green-50 p-3 rounded-lg shadow-sm border border-green-200"
       >
         <svg
-          class="w-8 h-8 mr-4 flex-shrink-0"
+          class="w-7 h-7 mr-3 flex-shrink-0"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -201,11 +200,12 @@
             class="text-green-600"
           ></path>
         </svg>
+
         <div>
-          <h3 class="font-bold text-xl text-green-800 mb-1">
+          <h3 class="font-bold text-lg text-green-800 mb-1">
             Stable Connection
           </h3>
-          <p class="text-gray-700">
+          <p class="text-sm text-gray-700">
             Ensure a reliable internet connection throughout the quiz to prevent
             interruptions.
           </p>
@@ -214,10 +214,10 @@
 
       <!-- Read Carefully -->
       <div
-        class="flex items-start bg-orange-50 p-4 rounded-lg shadow-sm border border-orange-200"
+        class="flex items-start bg-orange-50 p-3 rounded-lg shadow-sm border border-orange-200"
       >
         <svg
-          class="w-8 h-8 mr-4 flex-shrink-0"
+          class="w-7 h-7 mr-3 flex-shrink-0"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -231,23 +231,24 @@
             class="text-orange-600"
           ></path>
         </svg>
+
         <div>
-          <h3 class="font-bold text-xl text-orange-800 mb-1">
+          <h3 class="font-bold text-lg text-orange-800 mb-1">
             Careful Reading
           </h3>
-          <p class="text-gray-700">
+          <p class="text-sm text-gray-700">
             Read each question and all options thoroughly before selecting your
             answer.
           </p>
         </div>
       </div>
 
-      <!-- Submission -->
+      <!-- Submission
       <div
-        class="flex items-start bg-teal-50 p-4 rounded-lg shadow-sm border border-teal-200 col-span-1 md:col-span-2"
+        class="flex items-start bg-teal-50 p-3 rounded-lg shadow-sm border border-teal-200 col-span-1 md:col-span-2"
       >
         <svg
-          class="w-8 h-8 mr-4 flex-shrink-0"
+          class="w-7 h-7 mr-3 flex-shrink-0"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -261,26 +262,28 @@
             class="text-teal-600"
           ></path>
         </svg>
+
         <div>
-          <h3 class="font-bold text-xl text-teal-800 mb-1">
+          <h3 class="font-bold text-lg text-teal-800 mb-1">
             Timely Submission
           </h3>
-          <p class="text-gray-700">
+          <p class="text-sm text-gray-700">
             Ensure you submit your quiz before the timer expires to save your
             progress and answers.
           </p>
         </div>
-      </div>
+      </div> -->
     </div>
 
-    <div class="mt-10 text-center">
+    <!-- Start Button -->
+    <div class="mt-5 text-center">
       <button
         (click)="onStartQuiz()"
-        class="px-10 py-4 bg-gradient-to-r from-purple-600 to-indigo-700 text-white font-extrabold rounded-full shadow-lg hover:from-purple-700 hover:to-indigo-800 transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-800 text-lg sm:text-xl"
+        class="px-8 py-3 bg-gradient-to-r from-purple-600 to-indigo-700 text-white font-extrabold rounded-full shadow-lg hover:from-purple-700 hover:to-indigo-800 transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-800 text-base sm:text-lg"
       >
         I'm Ready! Start Quiz
         <svg
-          class="inline-block ml-3 w-6 h-6 animate-pulse"
+          class="inline-block ml-2 w-5 h-5 animate-pulse"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
