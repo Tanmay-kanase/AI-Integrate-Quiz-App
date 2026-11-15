@@ -68,7 +68,13 @@
               />
             </svg>
             Upload PDF
-            <input type="file" id="pdf-upload" accept=".pdf" class="hidden" />
+            <input
+              type="file"
+              id="pdf-upload"
+              accept="application/pdf,.pdf"
+              class="hidden"
+              (change)="onPdfSelected($event)"
+            />
           </label>
 
           <!-- New: Button to open the "Enter Topic" modal -->
@@ -114,7 +120,7 @@
               <!-- Main content column (6 units) -->
               <div class="col-span-12 md:col-span-6 flex flex-col items-center">
                 <h3
-                  class="text-2xl font-bold text-gray-900 text-gradient mb-6 flex items-center"
+                  class="text-2xl font-bold text-gray-1000 text-gradient mb-6 flex items-center"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -130,10 +136,14 @@
                       d="M9.663 17h4.673M12 20v-3m0 0l.688-.688C14.078 14.242 15 12.82 15 11c0-2.76-2.24-5-5-5S5 8.24 5 11c0 1.82.922 3.242 2.64 4.312L8 17H9.663z"
                     />
                   </svg>
-                  AI Generated Quiz
+                  {{
+                    source === "pdf"
+                      ? "Quiz from your PDF"
+                      : "AI Generated Quiz"
+                  }}
                 </h3>
 
-                <div class="w-full mb-6">
+                <div *ngIf="source === 'topic'" class="w-full mb-6">
                   <label for="modal-quiz-topic" class="sr-only"
                     >Enter Quiz Topic</label
                   >
@@ -145,6 +155,51 @@
                     [(ngModel)]="quizTopic"
                   />
                 </div>
+                <div *ngIf="source === 'pdf'" class="w-full mb-6">
+                  <div
+                    class="flex items-center justify-between gap-3 px-5 py-3 border border-gray-300 rounded-full bg-white text-gray-800"
+                  >
+                    <span
+                      class="truncate text-sm"
+                      [title]="selectedPdf?.name ?? ''"
+                    >
+                      {{ pdfLabel }}
+                    </span>
+                    <label
+                      for="pdf-change"
+                      class="shrink-0 text-sm font-semibold text-indigo-600 hover:text-indigo-800 cursor-pointer"
+                      [class.pointer-events-none]="isReadingPdf"
+                      [class.opacity-50]="isReadingPdf"
+                    >
+                      {{ selectedPdf ? "Change" : "Choose PDF" }}
+                    </label>
+                    <input
+                      type="file"
+                      id="pdf-change"
+                      accept="application/pdf,.pdf"
+                      class="hidden"
+                      (change)="onPdfSelected($event)"
+                    />
+                  </div>
+
+                  <!-- Known before generating: pages or text that will be cut -->
+                  <p
+                    *ngFor="let notice of extractNotices"
+                    class="mt-2 ml-1 text-xs text-amber-600"
+                  >
+                    {{ notice }}
+                  </p>
+
+                  <p
+                    *ngIf="!extractNotices.length"
+                    class="mt-2 ml-1 text-xs text-gray-500"
+                  >
+                    Up to {{ PDF_LIMITS.maxFileMB }} MB and
+                    {{ PDF_LIMITS.maxPages }} pages. Scanned PDFs without
+                    selectable text aren't supported.
+                  </p>
+                </div>
+
                 <div class="w-full grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                   <div class="flex flex-col">
                     <label class="text-sm font-semibold text-gray-700 mb-1 ml-1"
@@ -175,7 +230,7 @@
                 </div>
                 <button
                   (click)="generateQuizAndCloseModal()"
-                  [disabled]="!quizTopic.trim() || isLoading"
+                  [disabled]="!canGenerate || isLoading"
                   class="w-full relative bg-indigo-600 text-white px-8 py-3 rounded-full font-semibold shadow-md hover:bg-indigo-700 transition-all duration-300 disabled:opacity-90 disabled:cursor-not-allowed overflow-hidden flex items-center justify-center h-14"
                 >
                   <!-- Normal state: text + initial icon -->
@@ -271,6 +326,13 @@
                 />
               </svg>
             </button>
+            <p
+              *ngIf="errorMessage"
+              role="alert"
+              class="w-full mb-4 mt-4 text-sm text-red-600 text-center"
+            >
+              {{ errorMessage }}
+            </p>
           </div>
         </div>
       </div>
