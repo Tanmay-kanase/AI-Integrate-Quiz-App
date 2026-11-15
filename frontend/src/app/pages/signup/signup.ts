@@ -31,12 +31,12 @@ export class Signup {
     private router: Router,
   ) {}
 
-  onFileChange(event: any): void {
-    const file = event.target.files[0];
-    if (file) {
-      this.formData.profile_image = file;
-    }
-  }
+  // onFileChange(event: any): void {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     this.formData.profile_image = file;
+  //   }
+  // }
 
   onImageError(event: Event): void {
     const target = event.target as HTMLImageElement;

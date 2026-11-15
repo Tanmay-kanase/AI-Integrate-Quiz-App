@@ -3,17 +3,24 @@ import { environment } from '../environment/environment';
 import { catchError, Observable, tap } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { StorageService } from './storage';
 interface AuthResponse {
   token: string;
   user: any;
 }
+
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   http = inject(HttpClient);
+
   private apiUri = `${environment.apiUrl}/api/users`;
-  constructor(private router: Router) {}
+
+  constructor(
+    private router: Router,
+    private storageService: StorageService,
+  ) {}
 
   login(payload: {
     email: string;
@@ -22,7 +29,7 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUri}/login`, payload).pipe(
       tap((res) => this.setSession(res)),
       catchError((err) => {
-        console.error('Login Failed : ', err);
+        console.error('Login Failed:', err);
         throw err;
       }),
     );
@@ -36,34 +43,30 @@ export class AuthService {
     return this.http.post<AuthResponse>(`${this.apiUri}/signup`, payload).pipe(
       tap((res) => this.setSession(res)),
       catchError((err) => {
-        console.error('Signup Failed : ', err);
+        console.error('Signup Failed:', err);
         throw err;
       }),
     );
   }
 
-  private setSession(authResult: AuthResponse) {
-    localStorage.setItem('token', authResult.token);
-    localStorage.setItem('user', JSON.stringify(authResult.user));
+  private setSession(authResult: AuthResponse): void {
+    this.storageService.saveSession(authResult.token, authResult.user);
   }
 
-  getUser(): any {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
+  getUser() {
+    return this.storageService.getUser();
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
+  getToken() {
+    return this.storageService.getToken();
   }
 
-  isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
+  isLoggedIn() {
+    return this.storageService.isLoggedIn();
   }
 
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.clear();
+    this.storageService.logout();
     this.router.navigate(['/']);
   }
 }

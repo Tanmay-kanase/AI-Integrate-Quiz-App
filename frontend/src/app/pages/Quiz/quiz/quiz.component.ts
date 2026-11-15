@@ -6,6 +6,7 @@ import {
   Inject,
   DOCUMENT,
   HostListener,
+  inject,
 } from '@angular/core';
 import { InstructionsComponent } from '../../../shared/instructions/instructions.component';
 import { CommonModule } from '@angular/common';
@@ -13,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { QuizCompletionComponent } from '../QuizSuccess/quiz-completion.component';
 import { Router } from '@angular/router';
+import { StorageService } from '../../../services/storage';
 @Component({
   selector: 'app-quiz',
   standalone: true,
@@ -29,9 +31,10 @@ export class QuizComponent implements AfterViewInit, OnDestroy, OnInit {
   currentQuiz: any = null;
   questions: any[] = [];
   user: any;
+  private storageService = inject(StorageService);
   selectedAnswers: { [index: number]: string } = {};
   currentIndex = 0;
-  token = localStorage.getItem('token');
+  token = this.storageService.getToken();
   isSubmitting = false;
   constructor(
     private route: ActivatedRoute,
@@ -45,9 +48,8 @@ export class QuizComponent implements AfterViewInit, OnDestroy, OnInit {
   showCompletionPage: boolean = false;
   quizResult: any; // Store the result from the API call here
   quizStartTime!: number;
-
   ngOnInit(): void {
-    this.user = JSON.parse(localStorage.getItem('user') || '{}');
+    this.user = this.storageService.getUser() || '{}';
     this.route.queryParams.subscribe((params) => {
       const topicId = params['topicId'];
       if (topicId) {
@@ -55,6 +57,47 @@ export class QuizComponent implements AfterViewInit, OnDestroy, OnInit {
         this.fetchQuestions(topicId);
       }
     });
+  }
+
+  saveQuizAttempt(topicId: string, score: number): void {
+    const answers = this.questions.map((q, idx) => {
+      const selected = this.selectedAnswers[idx];
+
+      // Convert selected option string into index (0, 1, 2, 3)
+      const selectedOption = selected ? q.options.indexOf(selected) : -1;
+
+      const correctIndex = q.correctAnswer;
+
+      return {
+        question: q._id,
+        selectedOption,
+        isCorrect: selectedOption === correctIndex,
+      };
+    });
+
+    const payload = {
+      userId: this.user?._id || this.user?.id,
+      quizTopic: topicId,
+      score: score,
+      totalQuestions: this.questions.length,
+      answers: answers,
+      timeTaken: Math.floor((Date.now() - this.quizStartTime) / 1000),
+    };
+
+    this.http
+      .post('http://localhost:3000/api/quizAttempt', payload, {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+        },
+      })
+      .subscribe({
+        next: (res) => {
+          console.log('Quiz attempt saved:', res);
+        },
+        error: (err) => {
+          console.error('Failed to save quiz attempt:', err);
+        },
+      });
   }
 
   fetchQuiz(topicId: string) {
@@ -261,7 +304,7 @@ export class QuizComponent implements AfterViewInit, OnDestroy, OnInit {
         .subscribe({
           next: (res) => {
             console.log('Quiz submitted', res);
-
+            this.saveQuizAttempt(topicId, score);
             this.showCompletionPage = true;
 
             if (this.currentQuiz?.codingAssessment) {

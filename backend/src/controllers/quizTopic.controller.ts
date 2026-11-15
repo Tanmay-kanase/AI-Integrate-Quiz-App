@@ -7,7 +7,7 @@ const quizTopicService = new QuizTopicService();
 export const createQuizTopic = async (
   req: AuthRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const topic = await quizTopicService.create(req.body, req.user.userId);
@@ -20,7 +20,7 @@ export const createQuizTopic = async (
 export const submitQuiz = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   const quizId = req.params.id;
 
@@ -38,13 +38,17 @@ export const submitQuiz = async (
   }
 };
 export const getAllQuizTopics = async (
-  _req: Request,
+  req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
-    const topics = await quizTopicService.findAll();
-    res.status(200).json(topics);
+    const page = Math.max(1, Number(req.query.page) || 1);
+    const limit = Math.min(50, Math.max(1, Number(req.query.limit) || 8));
+
+    const result = await quizTopicService.findAll(page, limit);
+
+    res.status(200).json(result);
   } catch (error) {
     next(error);
   }
@@ -53,7 +57,7 @@ export const getAllQuizTopics = async (
 export const getQuizTopicById = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const topic = await quizTopicService.findById(req.params.id);

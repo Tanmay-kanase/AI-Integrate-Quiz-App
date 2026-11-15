@@ -13,7 +13,7 @@ export interface IQuizTopic extends Document {
 }
 
 const quizTopicSchema = new Schema<IQuizTopic>({
-  title: { type: String, required: true, unique: true },
+  title: { type: String, required: true },
   description: String,
   category: String,
   time: { type: String }, // new field
@@ -26,5 +26,4 @@ const quizTopicSchema = new Schema<IQuizTopic>({
   createdBy: { type: Schema.Types.ObjectId, ref: "User" },
   createdAt: { type: Date, default: Date.now },
 });
-
 export default model<IQuizTopic>("QuizTopic", quizTopicSchema);

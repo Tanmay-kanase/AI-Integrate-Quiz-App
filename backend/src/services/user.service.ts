@@ -34,6 +34,46 @@ class UserService {
     if (!user) throw new HttpException(404, "User not found");
     return user;
   }
+
+  async deleteUser(id: string) {
+    return await User.findByIdAndDelete(id);
+  }
+
+  async createUser(data: any) {
+    const existingUser = await User.findOne({
+      email: data.email,
+    });
+
+    if (existingUser) {
+      throw new Error("Email already registered");
+    }
+
+    const hashedPassword = await bcrypt.hash(data.password, 10);
+
+    return await User.create({
+      ...data,
+      password: hashedPassword,
+    });
+  }
+
+  async getAllUsers() {
+    return await User.find().select("-password");
+  }
+
+  async getUserById(id: string) {
+    return await User.findById(id).select("-password");
+  }
+
+  async updateUser(id: string, data: any) {
+    if (data.password) {
+      data.password = await bcrypt.hash(data.password, 10);
+    }
+
+    return await User.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true,
+    }).select("-password");
+  }
 }
 
 export default UserService;

@@ -1,8 +1,15 @@
-import { Component, DOCUMENT, HostListener, Inject } from '@angular/core';
+import {
+  Component,
+  DOCUMENT,
+  HostListener,
+  inject,
+  Inject,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { StorageService } from '../../services/storage';
 @Component({
   selector: 'app-coding-assessment',
   imports: [CommonModule, FormsModule],
@@ -33,8 +40,6 @@ export class CodingAssessment {
 
   topicId = '';
 
-  token = localStorage.getItem('token');
-
   language = 'java';
 
   code = '';
@@ -47,6 +52,8 @@ export class CodingAssessment {
     @Inject(DOCUMENT)
     private document: Document,
   ) {}
+
+  private storageService = inject(StorageService);
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       this.topicId = params['topicId'];
@@ -58,6 +65,8 @@ export class CodingAssessment {
 
     this.startAssessment();
   }
+
+  token = this.storageService.getToken();
 
   loadAssessment() {
     this.http

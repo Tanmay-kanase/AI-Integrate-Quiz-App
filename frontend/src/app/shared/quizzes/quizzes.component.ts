@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { StorageService } from '../../services/storage';
 
 // Interface for a single quiz, simplified for frontend display
 export interface Quiz {
@@ -11,6 +12,7 @@ export interface Quiz {
   title: string;
   description: string;
   category: string;
+  time: string;
   totalQuestions: number;
   usersAttempted: number;
   createdBy: {
@@ -31,45 +33,84 @@ export class QuizzesComponent implements OnInit {
   quizzes: Quiz[] = [];
   loading = true;
   error: string | null = null;
-
+  private storageService = inject(StorageService);
   private apiUrl = 'http://localhost:3000/api/topics'; // adjust if proxied
-
-  constructor(private router: Router, private http: HttpClient) {}
+  page = 1;
+  limit = 8;
+  hasMore = true;
+  loadingMore = false;
+  constructor(
+    private router: Router,
+    private http: HttpClient,
+  ) {}
 
   ngOnInit(): void {
     this.fetchQuizzes();
   }
 
   fetchQuizzes(): void {
-    console.log('Fetching from:', this.apiUrl);
+    this.loading = true;
+    this.error = null;
+    this.page = 1;
+    this.quizzes = [];
 
-    const token = localStorage.getItem('token');
+    this.loadQuizzes();
+  }
+
+  loadMore(): void {
+    if (!this.hasMore || this.loadingMore) return;
+
+    this.page++;
+    this.loadingMore = true;
+
+    this.loadQuizzes();
+  }
+
+  private loadQuizzes(): void {
+    const token = this.storageService.getToken();
+
     this.http
-      .get<Quiz[]>(this.apiUrl, {
+      .get<{
+        data: Quiz[];
+        total: number;
+        page: number;
+        limit: number;
+        hasMore: boolean;
+      }>(`${this.apiUrl}?page=${this.page}&limit=${this.limit}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       })
-      .pipe(
-        catchError((err) => {
-          console.error('Error fetching quizzes:', err);
-          this.error = 'Failed to load quizzes. Please try again.';
+      .subscribe({
+        next: (res) => {
+          const newQuizzes = res.data.map((quiz) => ({
+            ...quiz,
+            imageUrl:
+              quiz.imageUrl ||
+              `https://placehold.co/400x200?text=${encodeURIComponent(
+                quiz.title,
+              )}`,
+          }));
+
+          this.quizzes = [...this.quizzes, ...newQuizzes];
+          this.hasMore = res.hasMore;
+
           this.loading = false;
-          return of([]);
-        })
-      )
-      .subscribe((data) => {
-        // attach a fallback image if API doesn’t return one
-        console.log('API response', data);
-        this.quizzes = data.map((quiz) => ({
-          ...quiz,
-          imageUrl:
-            quiz.imageUrl ||
-            `https://placehold.co/400x200?text=${encodeURIComponent(
-              quiz.title
-            )}`,
-        }));
-        this.loading = false;
+          this.loadingMore = false;
+        },
+        error: (err) => {
+          console.error('Error fetching quizzes:', err);
+
+          this.error = 'Failed to load quizzes. Please try again.';
+
+          // Allow the same page to be retried.
+          if (this.loadingMore) {
+            this.page--;
+          }
+
+          this.loading = false;
+          this.loadingMore = false;
+        },
       });
   }
 

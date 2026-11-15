@@ -62,7 +62,7 @@
                     d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                   />
                 </svg>
-                <span class="leading-none">12 mins</span>
+                <span class="leading-none">{{ quiz.time }} mins</span>
               </div>
 
               <div class="flex items-center text-gray-500">
@@ -127,5 +127,21 @@
         </div>
       </div>
     </div>
+
+    @if (hasMore && !loading) {
+      <div class="mt-10 flex justify-center">
+        <button
+          (click)="loadMore()"
+          [disabled]="loadingMore"
+          class="rounded-xl bg-gradient-to-r from-purple-600 to-indigo-700 px-8 py-3 font-semibold text-white shadow-lg transition-all hover:scale-105 hover:from-purple-700 hover:to-indigo-800 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          @if (loadingMore) {
+            Loading...
+          } @else {
+            Load More
+          }
+        </button>
+      </div>
+    }
   </div>
 </section>

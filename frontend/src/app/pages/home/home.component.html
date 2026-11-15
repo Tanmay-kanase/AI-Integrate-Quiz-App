@@ -1,6 +1,12 @@
-<app-navbar></app-navbar>
+@if (isReady) {
+  <app-navbar></app-navbar>
 
-<app-hero></app-hero>
-<app-quizzes></app-quizzes>
+  @if (isLoggedIn) {
+    <app-hero></app-hero>
+    <app-quizzes></app-quizzes>
+  } @else {
+    <app-landpage></app-landpage>
+  }
 
-<app-footer></app-footer>
+  <app-footer></app-footer>
+}

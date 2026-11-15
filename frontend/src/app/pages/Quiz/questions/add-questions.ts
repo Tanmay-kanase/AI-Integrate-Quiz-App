@@ -1,5 +1,5 @@
 // add-questions.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -15,6 +15,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { forkJoin, Observable } from 'rxjs'; // For handling multiple HTTP requests
 import { CommonModule } from '@angular/common';
+import { StorageService } from '../../../services/storage';
 
 @Component({
   selector: 'app-add-questions',
@@ -25,6 +26,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AddQuestionsComponent implements OnInit {
   questionsForm!: FormGroup;
+  private storageService = inject(StorageService);
   totalQuestions: number = 0;
   quizTopicId: string = '';
   isLoading: boolean = false;
@@ -35,7 +37,7 @@ export class AddQuestionsComponent implements OnInit {
     private fb: FormBuilder,
     private http: HttpClient,
     private route: ActivatedRoute, // To get query parameters
-    private router: Router // For potential navigation after submission
+    private router: Router, // For potential navigation after submission
   ) {}
 
   ngOnInit(): void {
@@ -91,7 +93,7 @@ export class AddQuestionsComponent implements OnInit {
       questionText: ['', Validators.required],
       options: this.fb.array(
         ['', ''], // Start with two empty options
-        [Validators.required, Validators.minLength(2)] // Options are required, min 2
+        [Validators.required, Validators.minLength(2)], // Options are required, min 2
       ),
       correctAnswer: [null, Validators.required], // Correct answer index is required
       explanation: [''],
@@ -107,7 +109,7 @@ export class AddQuestionsComponent implements OnInit {
    * Applied at the question FormGroup level to access both options and correctAnswer.
    */
   private validateCorrectAnswerIndex(
-    questionFormGroup: FormGroup
+    questionFormGroup: FormGroup,
   ): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
       const options = group.get('options') as FormArray;
@@ -192,7 +194,7 @@ export class AddQuestionsComponent implements OnInit {
     const questionsData = this.questionsForm.value.questions;
     const httpRequests: Observable<any>[] = [];
 
-    const token = localStorage.getItem('token');
+    const token = this.storageService.getToken();
 
     questionsData.forEach((question: any) => {
       // Add the quizTopic ID to each question object
@@ -209,7 +211,7 @@ export class AddQuestionsComponent implements OnInit {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        })
+        }),
       );
     });
 

@@ -1,5 +1,5 @@
 // createQuiz.ts
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -10,6 +10,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { jwtDecode } from 'jwt-decode';
+import { StorageService } from '../../../services/storage';
 @Component({
   selector: 'app-create-quiz',
   templateUrl: './createQuiz.html',
@@ -32,7 +33,7 @@ export class CreateQuizComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -45,6 +46,8 @@ export class CreateQuizComponent implements OnInit {
       totalQuestions: [null, [Validators.required, Validators.min(1)]], // Total questions is required and must be at least 1
     });
   }
+
+  private storageService = inject(StorageService);
 
   /**
    * Handles the form submission.
@@ -64,7 +67,7 @@ export class CreateQuizComponent implements OnInit {
         }
       }
 
-      const token = localStorage.getItem('token');
+      const token = this.storageService.getToken();
 
       if (!token) {
         this.isLoading = false;

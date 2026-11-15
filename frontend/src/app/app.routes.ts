@@ -33,6 +33,11 @@ export const routes: Routes = [
         component: Signup,
       },
       {
+        path: 'profile',
+
+        component: ProfileComponent,
+      },
+      {
         path: 'signin',
         component: SigninComponent,
       },
@@ -51,7 +56,7 @@ export const routes: Routes = [
       },
     ],
   },
-  { path: 'profile', canActivate: [authGuard], component: ProfileComponent },
+
   { path: 'about', canActivate: [authGuard], component: AboutComponent },
   { path: 'navbar', component: NavbarComponent },
   { path: 'signup', component: Signup },
