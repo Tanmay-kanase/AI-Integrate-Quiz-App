@@ -11,13 +11,16 @@ import {
   withEventReplay,
 } from '@angular/platform-browser';
 import { authInterceptor } from './interceptors/auth-interceptor';
-
+import { provideMonacoEditor } from 'ngx-monaco-editor-v2';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideClientHydration(withEventReplay()),
+    provideMonacoEditor(),
     provideHttpClient(withInterceptors([authInterceptor])),
   ],
 };
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+imports: [FormsModule, MonacoEditorModule.forRoot()];

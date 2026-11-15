@@ -20,7 +20,7 @@
       >
       <select
         id="language"
-        [(ngModel)]="language"
+        [ngModel]="language"
         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 outline-none cursor-pointer"
       >
         <option value="c">C</option>
@@ -131,60 +131,116 @@
       ></div>
     </div>
 
-    <div id="right-panel" class="flex-1 flex flex-col bg-[#1e1e1e] min-w-[25%]">
-      <div class="bg-[#2d2d2d] border-b border-black flex px-4 pt-2">
-        <div
-          class="bg-[#1e1e1e] text-gray-300 text-sm py-2 px-4 border-t-2 border-blue-500 inline-block font-mono"
-        >
-          solution.{{ language }}
-        </div>
-      </div>
-
-      <div class="flex-1 p-4 flex flex-col relative">
-        <div
-          class="absolute left-4 top-4 bottom-4 w-8 text-right text-gray-500 font-mono text-sm leading-6 select-none pointer-events-none"
-        >
-          1<br />2<br />3<br />4<br />5
-        </div>
-
-        <textarea
-          [(ngModel)]="code"
-          class="w-full flex-1 bg-[#1e1e1e] text-[#d4d4d4] font-mono text-sm pl-10 p-2 rounded-none border-none focus:outline-none focus:ring-0 resize-none leading-6"
-          spellcheck="false"
-        >
-class Solution:
-    def missingNumber(self, nums):
-        # Write your code here
-        pass
-                </textarea
-        >
-      </div>
-
+    <div
+      id="right-panel"
+      class="flex-1 flex flex-col bg-[#1e1e1e] min-w-[25%]"
+      [class.pointer-events-none]="isResizing"
+      [class.select-none]="isResizing"
+    >
+      <!-- File tab bar -->
       <div
-        class="bg-[#2d2d2d] border-t border-black px-6 py-4 flex justify-between items-center"
+        class="bg-[#252526] flex items-center justify-between px-2 border-b border-black"
+      >
+        <div class="flex">
+          <div
+            class="bg-[#1e1e1e] text-gray-200 text-sm py-2 px-4 border-t-2 border-blue-500 font-mono flex items-center gap-2"
+          >
+            <span class="text-yellow-400 text-xs">●</span>{{ fileName }}
+          </div>
+        </div>
+        <button
+          (click)="code = starters[language]"
+          class="text-xs text-gray-400 hover:text-white px-3 py-1 rounded hover:bg-white/10"
+        >
+          Reset
+        </button>
+      </div>
+
+      <!-- Editor -->
+      <div class="flex-1 min-h-0">
+        <ngx-monaco-editor
+          class="block h-full"
+          [options]="editorOptions"
+          [(ngModel)]="code"
+        >
+        </ngx-monaco-editor>
+      </div>
+
+      <!-- Console (ready for when you add execution) -->
+      <div
+        class="bg-[#1e1e1e] border-t border-black flex flex-col"
+        [style.height.px]="consoleOpen ? 180 : 36"
+      >
+        <div
+          class="flex items-center justify-between bg-[#252526] px-3 h-9 flex-shrink-0"
+        >
+          <div class="flex gap-4 text-xs font-medium">
+            <button
+              (click)="activeTab='output'; consoleOpen=true"
+              [class]="activeTab==='output' ? 'text-white border-b-2 border-blue-500 pb-1' : 'text-gray-400 hover:text-gray-200'"
+            >
+              Output
+            </button>
+            <button
+              (click)="activeTab='testcases'; consoleOpen=true"
+              [class]="activeTab==='testcases' ? 'text-white border-b-2 border-blue-500 pb-1' : 'text-gray-400 hover:text-gray-200'"
+            >
+              Test Results
+            </button>
+          </div>
+          <button
+            (click)="consoleOpen = !consoleOpen"
+            class="text-gray-400 hover:text-white text-xs"
+          >
+            {{ consoleOpen ? '▼' : '▲' }}
+          </button>
+        </div>
+
+        <div
+          *ngIf="consoleOpen"
+          class="flex-1 overflow-auto p-3 font-mono text-xs text-gray-300"
+        >
+          <ng-container *ngIf="activeTab==='output'">
+            <pre *ngIf="output; else noOutput" class="whitespace-pre-wrap">
+{{ output }}</pre
+            >
+            <ng-template #noOutput
+              ><span class="text-gray-500"
+                >Run your code to see output here.</span
+              ></ng-template
+            >
+          </ng-container>
+          <div *ngIf="activeTab==='testcases'" class="text-gray-500">
+            No test results yet.
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer / actions -->
+      <div
+        class="bg-[#252526] border-t border-black px-4 py-3 flex justify-between items-center"
       >
         <div class="text-xs text-gray-400 flex items-center">
-          <span class="w-2 h-2 rounded-full bg-green-500 mr-2"></span>
-          Ready to compile
+          <span
+            class="w-2 h-2 rounded-full mr-2"
+            [class]="isRunning || isSubmitting ? 'bg-yellow-400 animate-pulse' : 'bg-green-500'"
+          ></span>
+          {{ isRunning ? 'Running…' : isSubmitting ? 'Submitting…' : 'Ready' }}
         </div>
-
-        <div class="flex space-x-3">
+        <div class="flex gap-3">
           <button
             (click)="runCode()"
-            [disabled]="isRunning"
-            class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded disabled:opacity-50"
+            [disabled]="isRunning || isSubmitting"
+            class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded disabled:opacity-50"
           >
-            <span *ngIf="!isRunning">Run Code</span>
-            <span *ngIf="isRunning">⏳ Running...</span>
+            {{ isRunning ? '⏳ Running…' : '▶ Run Code' }}
           </button>
-
           <button
             (click)="submitCode()"
-            [disabled]="isSubmitting"
-            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded disabled:opacity-50"
+            [disabled]="isRunning || isSubmitting"
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded disabled:opacity-50"
           >
-            <span *ngIf="!isSubmitting">Submit</span>
-            <span *ngIf="isSubmitting">⏳ Submitting...</span>
+            {{ isSubmitting ? '⏳ Submitting…' : 'Submit' }}
           </button>
         </div>
       </div>

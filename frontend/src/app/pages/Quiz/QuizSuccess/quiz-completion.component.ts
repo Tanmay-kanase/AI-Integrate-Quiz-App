@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import jsPDF from 'jspdf';
+import { Router } from '@angular/router';
 import html2canvas from 'html2canvas';
 import * as QRCode from 'qrcode';
 @Component({
@@ -18,7 +19,7 @@ export class QuizCompletionComponent implements OnInit {
   @Input() quizTime: string = 'N/A';
   @Input() timeTaken: string = 'N/A';
 
-  constructor() {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {}
 
@@ -28,7 +29,9 @@ export class QuizCompletionComponent implements OnInit {
     }
     return Math.round((this.score / this.totalQuestions) * 100);
   }
-
+  goToHome(): void {
+    this.router.navigate(['/']);
+  }
   async downloadCertificate() {
     // --- 1. Generate Unique Certificate Data ---
     const userNameInitials = this.userName
@@ -92,8 +95,8 @@ export class QuizCompletionComponent implements OnInit {
             For successfully completing the quiz titled <strong style="color: #0D2A4C;">"${
               this.quizTitle
             }"</strong> with a score of <strong style="color: #0D2A4C;">${
-      this.percentage
-    }%</strong>.
+              this.percentage
+            }%</strong>.
           </p>
           <div style="display: flex; justify-content: space-around; text-align: center; margin-top: 30px;">
             <div>

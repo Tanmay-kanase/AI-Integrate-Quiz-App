@@ -10,9 +10,60 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { StorageService } from '../../services/storage';
+import { MonacoEditorModule } from 'ngx-monaco-editor-v2';
+type Lang = 'c' | 'cpp' | 'java' | 'python' | 'perl' | 'javascript';
+
+const STARTERS: Record<Lang, string> = {
+  python: `class Solution:
+    def missingNumber(self, nums):
+        # Write your code here
+        pass
+`,
+  javascript: `class Solution {
+  missingNumber(nums) {
+    // Write your code here
+  }
+}
+`,
+  java: `class Solution {
+    public int missingNumber(int[] nums) {
+        // Write your code here
+        return 0;
+    }
+}
+`,
+  c: `int missingNumber(int* nums, int numsSize) {
+    // Write your code here
+    return 0;
+}
+`,
+  cpp: `class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        // Write your code here
+        return 0;
+    }
+};
+`,
+  perl: `sub missing_number {
+    my ($nums) = @_;
+    # Write your code here
+}
+`,
+};
+
+const EXTENSIONS: Record<Lang, string> = {
+  python: 'py',
+  javascript: 'js',
+  java: 'java',
+  c: 'c',
+  cpp: 'cpp',
+  perl: 'pl',
+};
+
 @Component({
   selector: 'app-coding-assessment',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, MonacoEditorModule],
   templateUrl: './coding-assessment.html',
   styleUrl: './coding-assessment.css',
 })
@@ -32,18 +83,24 @@ export class CodingAssessment {
 
   violations: string[] = [];
 
-  isResizing = false;
-
   submitted = false;
 
   assessment: any = null;
 
   topicId = '';
+  private lastViolation = 0;
 
-  language = 'java';
+  private registerViolation(reason: string) {
+    const now = Date.now();
+    if (now - this.lastViolation < 1500) return; // ignore duplicate events
+    this.lastViolation = now;
 
-  code = '';
+    this.tabSwitchCount++;
+    this.violations.push(`${reason} (${this.tabSwitchCount}/3)`);
 
+    if (this.tabSwitchCount >= 3) this.autoSubmit();
+    else setTimeout(() => alert(`Warning ${this.tabSwitchCount}/3: ${reason}`));
+  }
   leftPanelWidth = 50;
   constructor(
     private router: Router,
@@ -68,6 +125,49 @@ export class CodingAssessment {
 
   token = this.storageService.getToken();
 
+  language: Lang = 'python';
+  code = STARTERS[this.language];
+  isResizing = false;
+  activeTab: 'testcases' | 'output' = 'output';
+  output = ''; // you'll fill this after execution
+  consoleOpen = true;
+  starters = STARTERS;
+  editorOptions = {
+    theme: 'vs-dark',
+    language: 'python',
+    automaticLayout: true, // re-layouts when the drag bar resizes the panel
+    fontSize: 14,
+    fontFamily: "'JetBrains Mono', 'Fira Code', Consolas, monospace",
+    fontLigatures: true,
+    lineNumbers: 'on',
+    minimap: { enabled: false },
+    scrollBeyondLastLine: false,
+    tabSize: 4,
+    insertSpaces: true,
+    padding: { top: 12 },
+    renderLineHighlight: 'all',
+    bracketPairColorization: { enabled: true },
+    smoothScrolling: true,
+    cursorBlinking: 'smooth',
+    // Optional: for an assessment you may want these off
+    // quickSuggestions: false, suggestOnTriggerCharacters: false, parameterHints: { enabled: false },
+  };
+
+  get fileName() {
+    return `solution.${EXTENSIONS[this.language]}`;
+  }
+
+  @HostListener('document:mousemove', ['$event'])
+  onMove(e: MouseEvent) {
+    if (!this.isResizing) return;
+    const pct = (e.clientX / window.innerWidth) * 100;
+    this.leftPanelWidth = Math.min(75, Math.max(25, pct));
+  }
+
+  @HostListener('document:mouseup')
+  onUp() {
+    this.isResizing = false;
+  }
   loadAssessment() {
     this.http
       .get<any>(`http://localhost:3000/api/coding/quiz-topic/${this.topicId}`, {
@@ -81,13 +181,7 @@ export class CodingAssessment {
 
           this.assessment = res.data;
 
-          this.code = `public class Solution {
-
-    public static void main(String[] args) {
-
-    }
-
-}`;
+          this.code = STARTERS[this.language];
         },
 
         error: (err: any) => {
