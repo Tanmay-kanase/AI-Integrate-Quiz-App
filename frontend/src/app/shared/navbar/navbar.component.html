@@ -1,166 +1,244 @@
 <header
-  [ngClass]="{ 'sticky-navbar': isSticky }"
-  class="navbar sticky-navbar transition-all duration-300 ease-in-out"
+  class="sticky top-0 z-50 transition-shadow duration-300"
+  [class.shadow-md]="isSticky"
 >
-  <nav class="bg-white shadow-sm py-4 transition-colors duration-300">
-    <div class="container mx-auto px-4 flex justify-between items-center">
-      <!-- Logo/App Name -->
-      <a
-        href="#"
-        class="text-black hover:text-indigo-600 dark:hover:text-indigo-400"
-      >
-        AI QuizMaster
-      </a>
+  <nav class="bg-white shadow-sm py-4">
+    <div
+      class="container mx-auto px-4 grid grid-cols-2 md:grid-cols-3 items-center"
+    >
+      <!-- LEFT: Logo -->
+      <div class="flex items-center justify-start">
+        <a
+          routerLink="/"
+          class="text-xl font-bold text-black hover:text-indigo-600 transition-colors"
+        >
+          AI Quiz
+        </a>
+      </div>
 
-      <!-- Desktop Navigation Links -->
-      <div class="hidden md:flex space-x-6">
-        <ng-container *ngIf="isLoggedIn">
+      <!-- CENTER: Desktop Navigation -->
+      <div class="hidden md:flex items-center justify-center gap-3">
+        <ng-container *ngIf="isLoggedIn; else guestLinks">
           <a
             routerLink="/quiz-attendance"
-            class="text-gray-600 hover:text-indigo-600 font-medium transition-colors duration-300 rounded-lg p-2 hover:bg-gray-100"
-            >Quiz</a
+            routerLinkActive="active"
+            class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200"
           >
+            Quiz
+          </a>
 
           <a
             routerLink="/create-quiz"
-            class="text-gray-600 hover:text-indigo-600 font-medium transition-colors duration-300 rounded-lg p-2 hover:bg-gray-100"
-            >Create Quiz</a
+            routerLinkActive="active"
+            class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200"
           >
-          <a
-            href="#contact"
-            class="text-gray-600 hover:text-indigo-600 font-medium transition-colors duration-300 rounded-lg p-2 hover:bg-gray-100"
-            >Contact</a
-          ></ng-container
-        >
-        <ng-container *ngIf="!isLoggedIn">
-          <a
-            routerLink="signin"
-            class="text-gray-600 hover:text-indigo-600 font-medium transition-colors duration-300 rounded-lg p-2 hover:bg-gray-100"
-            >Sign In</a
-          >
-          <a
-            routerLink="signup"
-            class="bg-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:bg-indigo-700 transition-all duration-300 transform hover:scale-105"
-            >Sign Up</a
-          ></ng-container
-        >
-      </div>
-      <div class="flex gap-8">
-        <!-- Profile dropdown when logged in -->
-        <div *ngIf="isLoggedIn" class="relative group hidden md:block">
-          <div
-            class="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center cursor-pointer text-gray-700 font-semibold uppercase select-none hover:bg-gray-400 transition"
-          >
-            {{ user?.name?.charAt(0) }}
-          </div>
+            Create Quiz
+          </a>
 
-          <div
-            class="absolute right-0 mt-2 w-40 bg-white shadow-md rounded-lg group-hover:visible py-2 transition invisible"
+          <a
+            routerLink="/"
+            fragment="contact"
+            class="nav-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200"
           >
-            <a routerLink="/profile" class="block px-4 py-2 hover:bg-gray-100"
-              >Profile</a
-            >
-            <a
-              routerLink="/edit-profile"
-              class="block px-4 py-2 hover:bg-gray-100"
-              >Edit Profile</a
-            >
-            <button
-              (click)="logout()"
-              class="block w-full px-4 py-2 text-left text-red-600 hover:bg-gray-100"
-            >
-              Logout
-            </button>
+            Contact
+          </a>
+        </ng-container>
+
+        <ng-template #guestLinks>
+          <a routerLink="/signin" routerLinkActive="active" class="nav-link">
+            Sign In
+          </a>
+
+          <a
+            routerLink="/signup"
+            class="bg-indigo-600 text-white px-5 py-2 rounded-full shadow-md hover:bg-indigo-700 transition-all duration-300"
+          >
+            Sign Up
+          </a>
+        </ng-template>
+      </div>
+
+      <!-- RIGHT: Profile / Mobile Menu -->
+      <div class="flex items-center justify-end gap-3">
+        <!-- Desktop Profile Dropdown -->
+        <div
+          *ngIf="isLoggedIn"
+          #profileDropdown
+          class="hidden md:block relative"
+          data-profile-menu
+        >
+          <!-- Profile Button -->
+          <button
+            type="button"
+            (click)="toggleProfileMenu($event)"
+            class="w-11 h-11 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-lg uppercase hover:bg-indigo-200 transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2"
+            aria-label="Account menu"
+            aria-haspopup="menu"
+            aria-controls="profile-menu"
+            [attr.aria-expanded]="isProfileMenuOpen"
+          >
+            {{ user?.name?.charAt(0) || "U" }}
+          </button>
+
+          <!-- Dropdown Menu -->
+          <div
+            *ngIf="isProfileMenuOpen"
+            id="profile-menu"
+            class="absolute right-0 top-full mt-3 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 py-2 z-50 animate-fade-in-down"
+            role="menu"
+          >
+            <!-- User Information -->
+            <div class="px-4 py-3 mb-2">
+              <div class="flex items-center gap-3">
+                <div
+                  class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-lg uppercase shrink-0"
+                >
+                  {{ user?.name?.charAt(0) || "U" }}
+                </div>
+
+                <div class="min-w-0">
+                  <p class="text-sm font-semibold text-gray-800 truncate">
+                    {{ user?.name }}
+                  </p>
+                  <p class="text-xs text-gray-500 truncate">
+                    {{ user?.email }}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="border-t border-gray-100 mx-3"></div>
+
+            <!-- Profile -->
+            <div class="px-2 py-2 space-y-1">
+              <a
+                routerLink="/profile"
+                (click)="isProfileMenuOpen = false"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200"
+                role="menuitem"
+              >
+                <i class="fa-regular fa-user w-5 text-center text-gray-400"></i>
+                <span>My Profile</span>
+              </a>
+
+              <a
+                routerLink="/edit-profile"
+                (click)="isProfileMenuOpen = false"
+                class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 transition-colors duration-200"
+                role="menuitem"
+              >
+                <i
+                  class="fa-solid fa-pen-to-square w-5 text-center text-gray-400"
+                ></i>
+                <span>Edit Profile</span>
+              </a>
+            </div>
+
+            <div class="border-t border-gray-100 mx-3"></div>
+
+            <!-- Logout -->
+            <div class="px-2 pt-2">
+              <button
+                type="button"
+                (click)="logout()"
+                class="flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors duration-200"
+                role="menuitem"
+              >
+                <i class="fa-solid fa-right-from-bracket w-5 text-center"></i>
+                <span>Logout</span>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Mobile Menu Button (Hamburger) -->
-      <div class="md:hidden">
+        <!-- Mobile Menu Button -->
         <button
+          type="button"
           (click)="toggleMenu()"
-          class="text-gray-600 hover:text-indigo-600 focus:outline-none p-2 rounded-lg hover:bg-gray-100"
+          class="icon-btn md:hidden"
+          aria-label="Toggle menu"
+          aria-controls="mobile-menu"
+          [attr.aria-expanded]="isMenuOpen"
         >
           <svg
             class="w-6 h-6"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
           >
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
               stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h16"
+              [attr.d]="
+                isMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'
+              "
             ></path>
           </svg>
         </button>
       </div>
     </div>
 
-    <!-- Mobile Menu (Hidden by default) -->
-    <div *ngIf="isMenuOpen" class="md:hidden bg-white py-2 shadow-md">
-      <ng-container *ngIf="isLoggedIn">
-        <a
-          routerLink="/quiz-attendance"
-          (click)="toggleMenu()"
-          class="block px-4 py-2 text-gray-700 hover:bg-indigo-50"
-        >
-          Quiz
-        </a>
+    <!-- MOBILE NAVIGATION -->
+    <!-- MOBILE NAVIGATION (place after the grid div, still inside <nav>) -->
+    <div
+      *ngIf="isMenuOpen"
+      id="mobile-menu"
+      class="md:hidden absolute left-0 right-0 top-full bg-white border-t border-gray-100 shadow-lg max-h-[calc(100vh-4rem)] overflow-y-auto animate-fade-in-down"
+    >
+      <div class="container mx-auto px-4 py-3 space-y-1">
+        <ng-container *ngIf="isLoggedIn; else mobileGuest">
+          <div class="px-3 py-2 mb-2 border-b border-gray-100">
+            <p class="text-sm font-semibold text-gray-800">{{ user?.name }}</p>
+            <p class="text-xs text-gray-500 truncate">{{ user?.email }}</p>
+          </div>
 
-        <a
-          routerLink="/create-quiz"
-          (click)="toggleMenu()"
-          class="block px-4 py-2 text-gray-700 hover:bg-indigo-50"
-        >
-          Create Quiz
-        </a>
+          <a
+            routerLink="/quiz-attendance"
+            routerLinkActive="active"
+            class="mobile-nav-link"
+            >Quiz</a
+          >
+          <a
+            routerLink="/create-quiz"
+            routerLinkActive="active"
+            class="mobile-nav-link"
+            >Create Quiz</a
+          >
+          <a routerLink="/" fragment="contact" class="mobile-nav-link"
+            >Contact</a
+          >
+          <a
+            routerLink="/profile"
+            routerLinkActive="active"
+            class="mobile-nav-link"
+            >Profile</a
+          >
+          <a
+            routerLink="/edit-profile"
+            routerLinkActive="active"
+            class="mobile-nav-link"
+            >Edit Profile</a
+          >
+          <button
+            type="button"
+            (click)="logout()"
+            class="mobile-nav-link danger w-full text-left cursor-pointer"
+          >
+            Logout
+          </button>
+        </ng-container>
 
-        <button
-          (click)="logout()"
-          class="block w-full text-left px-4 py-2 text-red-600 hover:bg-indigo-50"
-        >
-          Logout
-        </button>
-      </ng-container>
-
-      <ng-container *ngIf="!isLoggedIn">
-        <a
-          routerLink="/signin"
-          (click)="toggleMenu()"
-          class="block px-4 py-2 text-gray-700 hover:bg-indigo-50"
-        >
-          Sign In
-        </a>
-
-        <a
-          routerLink="/signup"
-          (click)="toggleMenu()"
-          class="block px-4 py-2 text-indigo-600 font-semibold hover:bg-indigo-50"
-        >
-          Sign Up
-        </a>
-      </ng-container>
+        <ng-template #mobileGuest>
+          <a
+            routerLink="/signin"
+            routerLinkActive="active"
+            class="mobile-nav-link"
+            >Sign In</a
+          >
+          <a routerLink="/signup" class="mobile-nav-link cta">Sign Up</a>
+        </ng-template>
+      </div>
     </div>
-
-    <ng-container *ngIf="!isLoggedIn">
-      <a
-        routerLink="/signin"
-        (click)="toggleMenu()"
-        class="block px-4 py-2 text-gray-700 hover:bg-indigo-50"
-      >
-        Sign In
-      </a>
-
-      <a
-        routerLink="/signup"
-        (click)="toggleMenu()"
-        class="block px-4 py-2 text-indigo-600 font-semibold hover:bg-indigo-50"
-      >
-        Sign Up
-      </a>
-    </ng-container>
   </nav>
 </header>
